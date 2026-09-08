@@ -1,0 +1,7 @@
+:root {
+  --main-600: #292b75;
+}
+
+.navbar-brand img {
+  max-width: 150px;
+}
