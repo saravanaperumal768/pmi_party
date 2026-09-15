@@ -39,25 +39,27 @@
                 <div class="footer-item">
                     <div class="footer-contact">
                         <h3>Contact Info</h3>
-                        <p>Grursus mal suada faci Lorem to the ipsum dolarorit</p>
+
                         <ul>
                             <li>
                                 <i class="icofont-location-pin"></i>
-                                <a href="#">113 Pily, White House, New Jersey, USA</a>
+                                <a href="#">14/22, Navabharath Colony,<br>
+                                    2nd Street, Kalakshetra Colony,<br>
+                                    Besant Nagar,
+                                    Chennai – 600090.
+                                </a>
                             </li>
                             <li>
                                 <i class="icofont-ui-call"></i>
-                                <a href="tel:+0015481592491">+001-548-159-2491</a>
-                                <a href="tel:+1256548566523">+125-654-856-6523</a>
+                                <a href="tel:+9100000000">+91000000 000000</a>
+
                             </li>
                             <li>
                                 <i class="icofont-paper-plane"></i>
                                 <a href="#mailto:hello@pily.com"><span
                                         class="__cf_email__"
                                         data-cfemail="c6aea3aaaaa986b6afaabfe8a5a9ab">[email&#160;protected]</span></a>
-                                <a href="#mailto:info@pily.com"><span
-                                        class="__cf_email__"
-                                        data-cfemail="d5bcbbb3ba95a5bcb9acfbb6bab8">[email&#160;protected]</span></a>
+
                             </li>
                         </ul>
                     </div>
@@ -112,46 +114,8 @@
             <div class="col-sm-6 col-lg-4">
                 <div class="footer-item">
                     <div class="footer-events">
-                        <h3>Recent Events</h3>
-                        <div class="footer-events-inner">
-                            <ul class="align-items-center">
-                                <li>
-                                    <img
-                                        src="assets/images/footer-events1.jpg"
-                                        alt="Events" />
-                                    <span>16 Nov</span>
-                                </li>
-                                <li>
-                                    <a href="events.html">Protest Against Of The Black Community</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="footer-events-inner">
-                            <ul class="align-items-center">
-                                <li>
-                                    <img
-                                        src="assets/images/footer-events2.jpg"
-                                        alt="Events" />
-                                    <span>17 Nov</span>
-                                </li>
-                                <li>
-                                    <a href="events.html">Media Coverage Of The Protesting Event</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="footer-events-inner">
-                            <ul class="align-items-center">
-                                <li>
-                                    <img
-                                        src="assets/images/footer-events3.jpg"
-                                        alt="Events" />
-                                    <span>18 Nov</span>
-                                </li>
-                                <li>
-                                    <a href="events.html">Protest Against Inhuman Activities In City</a>
-                                </li>
-                            </ul>
-                        </div>
+                        <h3>Location</h3>
+
                     </div>
                 </div>
             </div>
@@ -161,7 +125,7 @@
     <div class="copyright-area two">
         <div class="container">
             <p>
-                © Podhu Makkal Iyakkam
+                © Tamilaga Podhu Makkal Iyakkam
                 <a href="https://solverssoftech.com/" target="_blank">SolversSoftech</a>
             </p>
         </div>
@@ -310,24 +274,48 @@
         // =========================================================
         // VALIDATE TEXT / SELECT / TEXTAREA
         // =========================================================
+        // =========================================================
+        // VALIDATE REQUIRED TEXT / SELECT / TEXTAREA
+        // =========================================================
         function validateRequiredField(input) {
+
             if (!input) {
                 return false;
             }
 
             const value = String(input.value || '').trim();
 
-            if (value === '') {
-                if (input.tagName === 'SELECT') {
-                    showFieldError(input, 'Please select an option');
-                } else {
-                    showFieldError(input, 'This field is required');
+            // SELECT validation
+            if (input.tagName === 'SELECT') {
+
+                // Empty or default value "0"
+                if (value === '' || value === '0') {
+
+                    showFieldError(
+                        input,
+                        'Please select an option'
+                    );
+
+                    return false;
                 }
+
+                clearFieldError(input);
+                return true;
+            }
+
+            // TEXT / TEXTAREA validation
+            if (value === '') {
+
+                showFieldError(
+                    input,
+                    'This field is required'
+                );
 
                 return false;
             }
 
             clearFieldError(input);
+
             return true;
         }
 

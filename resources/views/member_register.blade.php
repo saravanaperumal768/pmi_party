@@ -76,12 +76,16 @@
 
                                 <div class="form-group">
                                     <label for="community">Community</label>
-
-                                    <input
-                                        type="text"
-                                        id="community"
-                                        name="community"
-                                        required>
+                                    <select id="community" name="community">
+                                        <option value="" selected disabled>
+                                            Select Community
+                                        </option>
+                                        @foreach($community as $row)
+                                        <option value="{{ $row->comm_code }}">
+                                            {{ $row->comm_desc }}
+                                        </option>
+                                        @endforeach
+                                    </select>
 
                                     <div class="error-message"></div>
                                 </div>
@@ -154,7 +158,17 @@
 
                                 <div class="form-group">
                                     <label for="phone">Blood Group</label>
-                                    <input type="text" id="blood_group" name="blood_group" required>
+                                    <select id="blood_group" name="blood_group">
+                                        <option value="" selected disabled>
+                                            Select Blood Group
+                                        </option>
+                                        @foreach($blood as $row)
+                                        <option value="{{ $row->group_code }}">
+                                            {{ $row->group_desc }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+
                                     <div class="error-message"> </div>
                                 </div>
 
@@ -173,7 +187,18 @@
 
                                 <div class="form-group">
                                     <label for="qualification">Qualification</label>
-                                    <input type="text" id="qualification" name="qualification" required>
+
+                                    <select id="qualification" name="qualification">
+                                        <option value="" selected disabled>
+                                            Select Qualification
+                                        </option>
+                                        @foreach($qualification as $row)
+                                        <option value="{{ $row->qual_code }}">
+                                            {{ $row->qual_desc_eng }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    <!-- <input type="text" id="qualification" name="qualification" required> -->
                                     <div class="error-message"> </div>
                                 </div>
                                 <div class="form-group">
@@ -214,26 +239,6 @@
                                     <div class="error-message"></div>
                                 </div>
 
-
-                                <!-- Constitution -->
-                                <div class="form-group">
-                                    <label for="constitution">Constitution</label>
-
-                                    <select id="constitution" name="constitution">
-                                        <option value="">Select Constitution</option>
-
-                                        @foreach($const as $row)
-                                        <option value="{{ $row->id }}">
-                                            {{ $row->acname_eng }}
-                                        </option>
-                                        @endforeach
-
-                                    </select>
-
-                                    <div class="error-message"></div>
-                                </div>
-
-
                                 <!-- District -->
                                 <div class="form-group">
                                     <label for="district">District</label>
@@ -251,6 +256,28 @@
 
                                     <div class="error-message"></div>
                                 </div>
+
+
+                                <!-- Constitution -->
+                                <div class="form-group">
+                                    <label for="constitution">Assembly Constitution</label>
+
+                                    <select id="constitution" name="constitution">
+                                        <option value="">Select Assembly Constitution</option>
+
+                                        @foreach($const as $row)
+                                        <option value="{{ $row->id }}">
+                                            {{ $row->acname_eng }}
+                                        </option>
+                                        @endforeach
+
+                                    </select>
+
+                                    <div class="error-message"></div>
+                                </div>
+
+
+
 
 
                                 <!-- Taluk -->

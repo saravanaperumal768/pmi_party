@@ -96,9 +96,7 @@
                         <div class="nav-flag-dropdown">
                             <select>
                                 <option>English</option>
-                                <option>العربيّة</option>
-                                <option>Deutsch</option>
-                                <option>Português</option>
+                                <option>தமிழ்</option>
                             </select>
                         </div>
                     </div>
