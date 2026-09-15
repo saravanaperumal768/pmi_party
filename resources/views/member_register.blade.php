@@ -13,9 +13,16 @@
                 </div>
             </div>
         </div>
+        <div class="row pt-50 member_regi">
+            <div class="col-xl-12">
+                <h2 class="text-center">Member Registration</h2>
 
-        <div class="row justify-content-center pt-100 pb-100">
-            <div class="col-xl-8 ">
+            </div>
+        </div>
+
+        <div class="row justify-content-center pt-50 pb-100">
+
+            <div class="col-xl-8">
                 <div class="register-container">
                     <div class="sidebar">
 
@@ -41,7 +48,7 @@
 
                     <div class="main-content">
                         <form id="registrationForm" method="POST" enctype="multipart/form-data">
-
+                            @csrf
                             <!-- Step 1: Personal Information -->
                             <div class="form-step active">
                                 <div class="form-header">
@@ -64,12 +71,19 @@
                                     <input type="date" id="dob" name="dob" required>
                                     <div class="error-message"> </div>
                                 </div>
+                                <input type="hidden" name="age" id="age">
 
 
                                 <div class="form-group">
-                                    <label name="age">Age </label>
-                                    <input type="number" id="age" name="age" required>
-                                    <div class="error-message"> </div>
+                                    <label for="community">Community</label>
+
+                                    <input
+                                        type="text"
+                                        id="community"
+                                        name="community"
+                                        required>
+
+                                    <div class="error-message"></div>
                                 </div>
 
                                 <div class="form-group row">
@@ -84,23 +98,20 @@
 
                                     <div class="col-md-3">
                                         <label class="d-flex align-items-center">
-                                            <input type="radio" name="gender" value="female">
+                                            <input type="radio" name="gender" value="Female">
                                             <span class="ms-2">Female</span>
                                         </label>
                                     </div>
 
                                     <div class="col-md-3">
                                         <label class="d-flex align-items-center">
-                                            <input type="radio" name="others" value="others">
+                                            <input type="radio" name="gender" value="others">
                                             <span class="ms-2">Others</span>
                                         </label>
                                     </div>
 
-
-                                    <div class="error-message "></div>
-                                    <!-- ERROR -->
                                     <div class="col-md-12">
-
+                                        <div class="error-message"></div>
                                     </div>
                                 </div>
 
@@ -126,6 +137,8 @@
                                         <div class="error-message"></div>
                                     </div>
                                 </div>
+
+
 
 
                                 <div class="buttons">
@@ -186,61 +199,138 @@
                             <div class="form-step">
                                 <div class="form-header">
                                     <h1>Address Details</h1>
-
                                 </div>
 
+                                <!-- State -->
                                 <div class="form-group">
-                                    <label>State</label>
+                                    <label for="state">State</label>
+
                                     <select id="state" name="state" required>
                                         <option value="">Select State</option>
-                                        <option value="tamilnadu">Tamil Nadu</option>
-                                        <option value="puducherry">Puducherry</option>
-                                        <option value="kerala">Kerala</option>
-                                        <option value="karnataka">Karnataka</option>
-                                        <option value="telangana">Telangana</option>
-                                        <option value="andhra_pradesh">Andhra Pradesh</option>
-                                        <option value="others">Others</option>
+
+                                        <option value="tamil_nadu">Tamil Nadu</option>
                                     </select>
 
-                                    <div class="error-message"> </div>
+                                    <div class="error-message"></div>
                                 </div>
 
+
+                                <!-- Constitution -->
                                 <div class="form-group">
-                                    <label>District</label>
-                                    <select id="district" name="district">
+                                    <label for="constitution">Constitution</label>
+
+                                    <select id="constitution" name="constitution">
+                                        <option value="">Select Constitution</option>
+
+                                        @foreach($const as $row)
+                                        <option value="{{ $row->id }}">
+                                            {{ $row->acname_eng }}
+                                        </option>
+                                        @endforeach
+
+                                    </select>
+
+                                    <div class="error-message"></div>
+                                </div>
+
+
+                                <!-- District -->
+                                <div class="form-group">
+                                    <label for="district">District</label>
+
+                                    <select id="district" name="district" required>
                                         <option value="">Select District</option>
+
+                                        @foreach($district as $row)
+                                        <option value="{{ $row->id }}">
+                                            {{ $row->districtname_eng }}
+                                        </option>
+                                        @endforeach
+
                                     </select>
 
-                                    <div class="error-message"> </div>
+                                    <div class="error-message"></div>
                                 </div>
 
+
+                                <!-- Taluk -->
                                 <div class="form-group">
-                                    <label>Assembly</label>
-                                    <select id="assembly" name="assembly">
-                                        <option value="">Select Assembly</option>
+                                    <label for="taluk">Taluk</label>
+
+                                    <select id="taluk" name="taluk">
+                                        <option value="">Select Taluk</option>
+
+                                        @foreach($taluk as $row)
+                                        <option value="{{ $row->id }}">
+                                            {{ $row->taluk_name_eng }}
+                                        </option>
+                                        @endforeach
+
                                     </select>
 
-                                    <div class="error-message"> </div>
+                                    <div class="error-message"></div>
                                 </div>
 
+
+                                <!-- Block -->
                                 <div class="form-group">
-                                    <label>Taluk</label>
-                                    <input type="text" name="taluk" placeholder="Enter your Taluk">
+                                    <label for="block">Block</label>
+
+                                    <select id="block" name="block">
+                                        <option value="">Select Block</option>
+
+                                        @foreach($block as $row)
+                                        <option value="{{ $row->id }}">
+                                            {{ $row->block_name_eng }}
+                                        </option>
+                                        @endforeach
+
+                                    </select>
+
+                                    <div class="error-message"></div>
                                 </div>
 
+
+
+                                <!-- Part Number -->
+                                <div class="form-group">
+                                    <label for="part">Part Number</label>
+
+                                    <input
+                                        type="text"
+                                        id="part"
+                                        name="part"
+                                        placeholder="Enter Part Number">
+
+                                    <div class="error-message"></div>
+                                </div>
+
+
+                                <!-- Other Details -->
                                 <div class="form-group" id="otherBox">
                                     <label>Enter Details</label>
-                                    <input type="text" name="other_details" placeholder="Enter your State / District / Assembly">
+
+                                    <input
+                                        type="text"
+                                        name="other_details"
+                                        placeholder="Enter your State / District / Assembly">
+
+                                    <div class="error-message"></div>
                                 </div>
 
 
-
+                                <!-- Full Address -->
                                 <div class="form-group">
-                                    <label for="phone">Full Address</label>
-                                    <textarea rows="3" id="address" name="address" required></textarea>
-                                    <div class="error-message"> </div>
-                                </div>
+                                    <label for="address">Full Address</label>
 
+                                    <textarea
+                                        rows="3"
+                                        id="address"
+                                        name="address"
+                                        required></textarea>
+
+                                    <div class="error-message"></div>
+                                </div>
 
 
                                 <div class="buttons">
@@ -251,38 +341,103 @@
 
                             <!-- Step 3: Additional Information -->
                             <div class="form-step">
+
                                 <div class="form-header">
                                     <h1>ID Proof</h1>
-
-                                </div>
-                                <div class="form-group">
-                                    <label for="dietary">Upload Photo</label>
-                                    <input type="file" name="photo" accept="image/*" required>
-                                    <span class="file-limit">Image Size only (Max 250 KB)</span><br>
-
-                                    <div class="error-message"></div>
-                                    <img id="uploadedImage" src="#" alt="Uploaded Image" accept="image/png, image/jpeg"
-                                        style="display:none;">
                                 </div>
 
+                                <!-- PHOTO -->
                                 <div class="form-group">
-                                    <label>ID Proof (Aadhaar/ Voter ID)</label>
 
-                                    <input type="file" name="id_proof" accept=".pdf,image/*" required>
+                                    <label for="photo">Upload Photo</label>
 
-                                    <span class="file-limit">PNG/PDF Size only (Max 250 KB)</span><br>
+                                    <input
+                                        type="file"
+                                        name="photo"
+                                        id="photo"
+                                        accept=".png,.jpg,.jpeg"
+                                        onchange="previewImage(this)">
 
-                                    <!-- FILE PREVIEW -->
-                                    <div id="filePreview" style="margin-top:10px;"></div>
+                                    <span class="file-limit">
+                                        PNG/JPG Size only (Max 1 MB)
+                                    </span>
 
                                     <div class="error-message"></div>
 
+                                    <img
+                                        id="uploadedImage"
+                                        src=""
+                                        alt="Uploaded Image"
+                                        style="
+                                            display:none;
+                                            width:150px;
+                                            height:150px;
+                                            object-fit:cover;
+                                            margin-top:10px;
+                                            border:1px solid #ddd;
+                                            border-radius:5px;
+                                        ">
+
                                 </div>
+
+
+                                <!-- VOTER ID -->
+                                <div class="form-group">
+
+                                    <label for="voter_id">
+                                        Voter ID Number
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="voter_id"
+                                        id="voter_id"
+                                        placeholder="Enter your Voter ID Number">
+
+                                    <div class="error-message"></div>
+
+                                </div>
+
+
+                                <!-- VOTER ID PROOF -->
+                                <div class="form-group">
+
+                                    <label for="id_proof">
+                                        Upload Voter ID
+                                    </label>
+
+                                    <input
+                                        type="file"
+                                        name="id_proof"
+                                        id="id_proof"
+                                        accept=".pdf,.png,.jpg,.jpeg"
+                                        onchange="previewIdProof(this)">
+
+                                    <span class="file-limit">
+                                        PDF/PNG/JPG Size only (Max 1 MB)
+                                    </span>
+
+                                    <div class="error-message"></div>
+
+                                    <div
+                                        id="filePreview"
+                                        style="margin-top:10px;"></div>
+
+                                </div>
+
 
                                 <div class="buttons">
-                                    <button type="button" class="prev">Back</button>
-                                    <button type="submit" class="submit">Complete Registration</button>
+
+                                    <button type="button" class="prev">
+                                        Back
+                                    </button>
+
+                                    <button type="submit" class="submit">
+                                        Complete Registration
+                                    </button>
+
                                 </div>
+
                             </div>
                         </form>
 
@@ -290,6 +445,10 @@
                         <div class="success-message" style="display:none;"></div>
                     </div>
                 </div>
+            </div>
+
+            <div class="col-xl-4 joinus">
+                <img src="assets/images/joinus.jpg">
             </div>
 
 

@@ -216,301 +216,1330 @@
 <script src="{{ asset('assets/js/custom.js') }}"></script>
 
 
+<script src="{{ asset('assets/js/pmi_registration.js') }}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 <script>
-    //   register tab------------------------
     document.addEventListener('DOMContentLoaded', function() {
 
         const form = document.getElementById('registrationForm');
         const steps = Array.from(document.querySelectorAll('.form-step'));
         const stepItems = Array.from(document.querySelectorAll('.step-item'));
-        const successMessage = document.querySelector('.success-message');
 
         let currentStep = 0;
 
-        // =============================
+        // =========================================================
         // SHOW STEP
-        // =============================
+        // =========================================================
         function showStep(stepIndex) {
+
             steps.forEach((step, index) => {
                 step.classList.toggle('active', index === stepIndex);
             });
+
             updateStepIndicators();
         }
 
+
+        // =========================================================
+        // STEP INDICATORS
+        // =========================================================
         function updateStepIndicators() {
+
             stepItems.forEach((item, index) => {
-                item.classList.toggle('active', index === currentStep);
-                item.classList.toggle('completed', index < currentStep);
+
+                item.classList.toggle(
+                    'active',
+                    index === currentStep
+                );
+
+                item.classList.toggle(
+                    'completed',
+                    index < currentStep
+                );
             });
         }
 
-        // =============================
-        // VALIDATION
-        // =============================
-        function validateStep(stepIndex) {
 
-            // const currentStepElement = steps[stepIndex];
-            // const inputs = currentStepElement.querySelectorAll(
-            //     'input[required], select[required], textarea[required]'
-            // );
+        // =========================================================
+        // CLEAR FIELD ERROR
+        // =========================================================
+        function clearFieldError(input) {
 
-            // let isValid = true;
-            // const selectedState = document.getElementById("state").value;
+            input.classList.remove('error-border');
 
+            const formGroup = input.closest('.form-group');
 
-            // inputs.forEach(input => {
+            if (!formGroup) {
+                return;
+            }
 
-            //     const errorBox = input.closest('.form-group')?.querySelector('.error-message');
+            const errorBox =
+                formGroup.querySelector('.error-message');
 
-            //     if (selectedState === "others") {
-
-            //         // ✅ validate only other_details
-            //         if (input.name === "other_details") {
-            //             if (!input.value.trim()) {
-            //                 isValid = false;
-            //                 input.classList.add('error-border');
-            //                 if (errorBox) errorBox.innerText = "Please enter details";
-            //             } else {
-            //                 input.classList.remove('error-border');
-            //                 if (errorBox) errorBox.innerText = "";
-            //             }
-            //         }
-
-            //         // ❌ skip district & assembly
-            //         if (input.name === "district" || input.name === "assembly") {
-            //             input.classList.remove('error-border');
-            //             if (errorBox) errorBox.innerText = "";
-            //         }
-
-            //         return; // 🔥 stop further validation for this input
-            //     }
-
-            //     // 🔥 SKIP district & assembly validation
-            //     if (input.name === "district" || input.name === "assembly") {
-            //         input.classList.remove('error-border');
-            //         if (errorBox) errorBox.innerText = "";
-            //         return;
-            //     }
-
-            //     // 🔥 SELECT VALIDATION
-            //     if (input.tagName === "SELECT") {
-
-            //         if (!input.value) {
-            //             isValid = false;
-            //             input.classList.add('error-border');
-            //             if (errorBox) errorBox.innerText = "Please select an option";
-            //         } else {
-            //             input.classList.remove('error-border');
-            //             if (errorBox) errorBox.innerText = "";
-            //         }
-
-            //     }
-
-            //     // 🔥 INPUT / TEXTAREA
-            //     else if (input.type !== "radio" && !input.value.trim()) {
-            //         isValid = false;
-            //         input.classList.add('error-border');
-            //         if (errorBox) errorBox.innerText = "This field is required";
-            //     } else {
-            //         input.classList.remove('error-border');
-            //         if (errorBox) errorBox.innerText = "";
-            //     }
-            // });
-
-            // // RADIO VALIDATION (unchanged)
-            // const radioGroups = new Set();
-
-            // currentStepElement.querySelectorAll('input[type="radio"]').forEach(radio => {
-            //     radioGroups.add(radio.name);
-            // });
-
-            // radioGroups.forEach(name => {
-            //     const radios = currentStepElement.querySelectorAll(`input[name="${name}"]`);
-            //     const checked = currentStepElement.querySelector(`input[name="${name}"]:checked`);
-
-            //     const errorBox = radios[0].closest('.form-group')?.querySelector('.error-message');
-
-            //     if (!checked) {
-            //         isValid = false;
-            //         if (errorBox) errorBox.innerText = "Select an option";
-            //     } else {
-            //         if (errorBox) errorBox.innerText = "";
-            //     }
-            // });
-
-
-
-            // return isValid;
+            if (errorBox) {
+                errorBox.innerText = '';
+            }
         }
 
-        // =============================
-        // FILE VALIDATION (250KB)
-        // =============================
-        function validateFile(input) {
-            const file = input.files[0];
-            const errorBox = input.closest('.form-group')?.querySelector('.error-message');
 
-            if (!file) return true;
+        // =========================================================
+        // SHOW FIELD ERROR
+        // =========================================================
+        function showFieldError(input, message) {
 
-            const maxSize = 250 * 1024;
+            input.classList.add('error-border');
 
-            if (file.size > maxSize) {
-                if (errorBox) errorBox.innerText = "File must be less than 250KB";
-                input.value = "";
+            const formGroup = input.closest('.form-group');
+
+            if (!formGroup) {
+                return;
+            }
+
+            const errorBox =
+                formGroup.querySelector('.error-message');
+
+            if (errorBox) {
+                errorBox.innerText = message;
+            }
+        }
+
+
+        // =========================================================
+        // VALIDATE TEXT / SELECT / TEXTAREA
+        // =========================================================
+        function validateRequiredField(input) {
+            if (!input) {
                 return false;
-            } else {
-                if (errorBox) errorBox.innerText = "";
+            }
+
+            const value = String(input.value || '').trim();
+
+            if (value === '') {
+                if (input.tagName === 'SELECT') {
+                    showFieldError(input, 'Please select an option');
+                } else {
+                    showFieldError(input, 'This field is required');
+                }
+
+                return false;
+            }
+
+            clearFieldError(input);
+            return true;
+        }
+
+
+        // =========================================================
+        // VALIDATE MOBILE
+        // =========================================================
+        function validateMobile() {
+
+            const input =
+                document.getElementById('mobile_number');
+
+            if (!input) return true;
+
+            const value = input.value.trim();
+
+            if (!value) {
+                showFieldError(
+                    input,
+                    'Mobile number is required'
+                );
+                return false;
+            }
+
+            if (!/^[6-9][0-9]{9}$/.test(value)) {
+
+                showFieldError(
+                    input,
+                    'Enter valid 10 digit mobile number'
+                );
+
+                return false;
+            }
+
+            clearFieldError(input);
+
+            return true;
+        }
+
+
+        // =========================================================
+        // VALIDATE EMAIL
+        // =========================================================
+        function validateEmail() {
+
+            const input =
+                document.getElementById('email');
+
+            if (!input) return true;
+
+            const value = input.value.trim();
+
+            if (!value) {
+
+                showFieldError(
+                    input,
+                    'Email is required'
+                );
+
+                return false;
+            }
+
+            const emailRegex =
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailRegex.test(value)) {
+
+                showFieldError(
+                    input,
+                    'Enter a valid email address'
+                );
+
+                return false;
+            }
+
+            clearFieldError(input);
+
+            return true;
+        }
+
+
+        // =========================================================
+        // VALIDATE DOB
+        // =========================================================
+        function validateDOB() {
+
+            const input = document.getElementById('dob');
+
+            if (!input) {
                 return true;
             }
+
+            const value = String(input.value || '').trim();
+
+            // Empty DOB
+            if (value === '') {
+
+                showFieldError(
+                    input,
+                    'Date of birth is required'
+                );
+
+                return false;
+            }
+
+            const dobDate = new Date(value + 'T00:00:00');
+
+            if (isNaN(dobDate.getTime())) {
+
+                showFieldError(
+                    input,
+                    'Please enter a valid date of birth'
+                );
+
+                return false;
+            }
+
+            // Today
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // Future / today
+            if (dobDate >= today) {
+
+                showFieldError(
+                    input,
+                    'Date of birth must be before today'
+                );
+
+                return false;
+            }
+
+            // Calculate age
+            let age =
+                today.getFullYear() -
+                dobDate.getFullYear();
+
+            const monthDifference =
+                today.getMonth() -
+                dobDate.getMonth();
+
+            if (
+                monthDifference < 0 ||
+                (
+                    monthDifference === 0 &&
+                    today.getDate() < dobDate.getDate()
+                )
+            ) {
+                age--;
+            }
+
+            // Below 18
+            if (age < 18) {
+
+                showFieldError(
+                    input,
+                    'You must be 18 years or older to apply'
+                );
+
+                return false;
+            }
+
+            clearFieldError(input);
+
+            // Store calculated age in hidden field
+            const ageInput =
+                document.getElementById('age');
+
+            if (ageInput) {
+                ageInput.value = age;
+            }
+
+            return true;
         }
 
 
+        // =========================================================
+        // VALIDATE RADIO GROUP
+        // =========================================================
+        function validateRadioGroup(stepElement, name) {
 
-        // =============================
-        // NEXT / PREV
-        // =============================
-        // document.querySelectorAll('.next').forEach(btn => {
-        //     btn.addEventListener('click', () => {
-        //         if (validateStep(currentStep)) {
-        //             currentStep++;
-        //             showStep(currentStep);
-        //         } else {
-        //             Swal.fire({
-        //                 icon: 'error',
-        //                 title: 'Validation Error',
-        //                 text: 'Please fill all required fields'
-        //             });
-        //         }
-        //     });
-        // });
+            const radios =
+                stepElement.querySelectorAll(
+                    `input[name="${name}"]`
+                );
 
-        // document.querySelectorAll('.prev').forEach(btn => {
-        //     btn.addEventListener('click', () => {
-        //         currentStep--;
-        //         showStep(currentStep);
-        //     });
-        // });
+            if (!radios.length) {
+                return true;
+            }
 
-        // =============================
-        // NEXT / PREV
-        // =============================
+            const checked =
+                stepElement.querySelector(
+                    `input[name="${name}"]:checked`
+                );
 
-        document.querySelectorAll('.next').forEach(btn => {
-            btn.addEventListener('click', () => {
+            const formGroup =
+                radios[0].closest('.form-group');
 
-                // No validation
+            const errorBox =
+                formGroup?.querySelector('.error-message');
+
+            if (!checked) {
+
+                if (errorBox) {
+                    errorBox.innerText =
+                        'Please select an option';
+                }
+
+                return false;
+            }
+
+            if (errorBox) {
+                errorBox.innerText = '';
+            }
+
+            return true;
+        }
+
+
+        // =========================================================
+        // FILE VALIDATION
+        // =========================================================
+        function validateFile(input, allowedTypes, maxSize, message) {
+
+            if (!input) {
+                return false;
+            }
+
+            // No file selected
+            if (!input.files || input.files.length === 0) {
+
+                showFieldError(
+                    input,
+                    'This file is required'
+                );
+
+                return false;
+            }
+
+            const file = input.files[0];
+
+            // File type
+            if (!allowedTypes.includes(file.type)) {
+
+                showFieldError(
+                    input,
+                    message
+                );
+
+                return false;
+            }
+
+            // File size
+            if (file.size > maxSize) {
+
+                showFieldError(
+                    input,
+                    'File size must not exceed 1 MB'
+                );
+
+                return false;
+            }
+
+            // Valid
+            clearFieldError(input);
+
+            return true;
+        }
+
+
+        // =========================================================
+        // VALIDATE CURRENT STEP
+        // =========================================================
+        function validateStep(stepIndex) {
+
+            const currentStepElement =
+                steps[stepIndex];
+
+            let isValid = true;
+
+
+            // =====================================================
+            // STEP 1
+            // =====================================================
+            if (stepIndex === 0) {
+
+                const requiredFields = [
+                    'name',
+                    'father_name',
+                    'community',
+                ];
+
+                requiredFields.forEach(function(name) {
+
+                    const input =
+                        currentStepElement.querySelector(
+                            `[name="${name}"]`
+                        );
+
+                    if (input) {
+
+                        if (!validateRequiredField(input)) {
+                            isValid = false;
+                        }
+                    }
+                });
+
+
+                // IMPORTANT: DOB validation
+                if (!validateDOB()) {
+                    isValid = false;
+                }
+
+
+                // Gender
+                if (!validateRadioGroup(
+                        currentStepElement,
+                        'gender'
+                    )) {
+                    isValid = false;
+                }
+
+
+                // Marital status
+                if (!validateRadioGroup(
+                        currentStepElement,
+                        'martialstatus'
+                    )) {
+                    isValid = false;
+                }
+            }
+
+
+            // =====================================================
+            // STEP 2
+            // =====================================================
+            if (stepIndex === 1) {
+
+                const requiredFields = [
+                    'blood_group',
+                    'qualification',
+                    'occupation',
+                    'social_media'
+                ];
+
+                requiredFields.forEach(function(name) {
+
+                    const input =
+                        currentStepElement.querySelector(
+                            `[name="${name}"]`
+                        );
+
+                    if (input) {
+
+                        if (!validateRequiredField(input)) {
+                            isValid = false;
+                        }
+                    }
+                });
+
+
+                // Mobile
+                if (!validateMobile()) {
+                    isValid = false;
+                }
+
+
+                // Email
+                if (!validateEmail()) {
+                    isValid = false;
+                }
+            }
+
+
+            // =====================================================
+            // STEP 3
+            // =====================================================
+            if (stepIndex === 2) {
+
+                const requiredFields = [
+                    'state',
+                    'constitution',
+                    'district',
+                    'taluk',
+                    'block',
+                    'part',
+                    'address'
+                ];
+
+                requiredFields.forEach(function(name) {
+
+                    const input =
+                        currentStepElement.querySelector(
+                            `[name="${name}"]`
+                        );
+
+                    if (input) {
+
+                        if (!validateRequiredField(input)) {
+                            isValid = false;
+                        }
+                    }
+                });
+
+
+                // Other details is optional
+                const otherDetails =
+                    currentStepElement.querySelector(
+                        '[name="other_details"]'
+                    );
+
+                if (otherDetails) {
+                    clearFieldError(otherDetails);
+                }
+            }
+
+
+            // =====================================================
+            // STEP 4
+            // =====================================================
+            // =====================================================
+            // STEP 4 - ID PROOF
+            // =====================================================
+            if (stepIndex === 3) {
+
+                // PHOTO
+                const photo = document.getElementById('photo');
+
+                if (photo) {
+
+                    if (!validateFile(
+                            photo,
+                            ['image/png', 'image/jpeg'],
+                            1024 * 1024,
+                            'Only PNG, JPG and JPEG images are allowed'
+                        )) {
+                        isValid = false;
+                    }
+                }
+
+
+                // VOTER ID
+                const voterId =
+                    document.getElementById('voter_id');
+
+                if (voterId) {
+
+                    if (!validateRequiredField(voterId)) {
+                        isValid = false;
+                    }
+                }
+
+
+                // VOTER ID PROOF
+                const idProof =
+                    document.getElementById('id_proof');
+
+                if (idProof) {
+
+                    if (!validateFile(
+                            idProof,
+                            [
+                                'application/pdf',
+                                'image/png',
+                                'image/jpeg'
+                            ],
+                            1024 * 1024,
+                            'Only PDF, PNG, JPG and JPEG files are allowed'
+                        )) {
+                        isValid = false;
+                    }
+                }
+            }
+
+
+            return isValid;
+        }
+
+
+        // =========================================================
+        // NEXT BUTTON
+        // =========================================================
+        document.querySelectorAll('.next').forEach(function(button) {
+
+            button.addEventListener('click', function() {
+
+                // Validate current step FIRST
+                const valid =
+                    validateStep(currentStep);
+
+                if (!valid) {
+
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Validation Error',
+                        text: 'Please correct the highlighted fields.'
+                    });
+
+                    return;
+                }
+
+
+                // Move to next step
                 if (currentStep < steps.length - 1) {
+
                     currentStep++;
+
                     showStep(currentStep);
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
                 }
 
             });
+
         });
 
-        document.querySelectorAll('.prev').forEach(btn => {
-            btn.addEventListener('click', () => {
+
+        // =========================================================
+        // PREVIOUS BUTTON
+        // =========================================================
+        document.querySelectorAll('.prev').forEach(function(button) {
+
+            button.addEventListener('click', function() {
 
                 if (currentStep > 0) {
+
                     currentStep--;
+
                     showStep(currentStep);
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
                 }
 
             });
+
         });
-        // =============================
-        // MOBILE VALIDATION
-        // =============================
-        document.getElementById('mobile_number').addEventListener('keyup', function() {
 
-            let value = this.value.replace(/\D/g, '');
-            this.value = value;
 
-            const errorBox = this.closest('.form-group')?.querySelector('.error-message');
-            let regex = /^[6-9][0-9]{9}$/;
+        // =========================================================
+        // MOBILE INPUT
+        // =========================================================
+        const mobile =
+            document.getElementById('mobile_number');
 
-            if (!regex.test(value)) {
-                errorBox.innerText = "Enter valid mobile number (6-9 start, 10 digits)";
-            } else {
-                errorBox.innerText = "";
+        if (mobile) {
+
+            mobile.addEventListener('input', function() {
+
+                this.value =
+                    this.value.replace(/\D/g, '')
+                    .substring(0, 10);
+
+                if (this.value.length === 10) {
+                    validateMobile();
+                } else {
+                    clearFieldError(this);
+                }
+
+            });
+        }
+
+
+        // =========================================================
+        // EMAIL INPUT
+        // =========================================================
+        const email =
+            document.getElementById('email');
+
+        if (email) {
+
+            email.addEventListener('blur', function() {
+
+                if (this.value.trim()) {
+                    validateEmail();
+                }
+
+            });
+        }
+
+
+        // =========================================================
+        // DOB - SET MAX DATE
+        // =========================================================
+        const dob =
+            document.getElementById('dob');
+
+        if (dob) {
+
+            const today =
+                new Date().toISOString().split('T')[0];
+
+            dob.setAttribute('max', today);
+        }
+
+
+        // =========================================================
+        // PHOTO PREVIEW
+        // =========================================================
+        window.previewImage = function(input) {
+
+            const image =
+                document.getElementById('uploadedImage');
+
+            const formGroup =
+                input.closest('.form-group');
+
+            const errorBox =
+                formGroup?.querySelector('.error-message');
+
+
+            image.style.display = 'none';
+            image.src = '';
+
+            if (errorBox) {
+                errorBox.innerText = '';
             }
-        });
 
-        // =============================
-        // EMAIL VALIDATION
-        // =============================
-        document.getElementById('email').addEventListener('blur', function() {
+            input.classList.remove('error-border');
 
-            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            const errorBox = this.closest('.form-group')?.querySelector('.error-message');
 
-            if (!regex.test(this.value)) {
-                errorBox.innerText = "Enter valid email";
-            } else {
-                errorBox.innerText = "";
+            if (!input.files || !input.files.length) {
+                return;
             }
+
+
+            const file =
+                input.files[0];
+
+
+            // Type
+            if (![
+                    'image/png',
+                    'image/jpeg'
+                ].includes(file.type)) {
+
+                if (errorBox) {
+                    errorBox.innerText =
+                        'Only PNG, JPG and JPEG images are allowed';
+                }
+
+                input.classList.add('error-border');
+                input.value = '';
+
+                return;
+            }
+
+
+            // Size
+            if (file.size > 1024 * 1024) {
+
+                if (errorBox) {
+                    errorBox.innerText =
+                        'Photo size must not exceed 1 MB';
+                }
+
+                input.classList.add('error-border');
+                input.value = '';
+
+                return;
+            }
+
+
+            // Preview
+            const reader =
+                new FileReader();
+
+            reader.onload = function(event) {
+
+                image.src =
+                    event.target.result;
+
+                image.style.display =
+                    'block';
+            };
+
+            reader.readAsDataURL(file);
+        };
+
+
+        // =========================================================
+        // ID PROOF PREVIEW
+        // =========================================================
+        window.previewIdProof = function(input) {
+
+            const preview =
+                document.getElementById('filePreview');
+
+            const formGroup =
+                input.closest('.form-group');
+
+            const errorBox =
+                formGroup?.querySelector('.error-message');
+
+
+            preview.innerHTML = '';
+
+            if (errorBox) {
+                errorBox.innerText = '';
+            }
+
+            input.classList.remove('error-border');
+
+
+            if (!input.files || !input.files.length) {
+                return;
+            }
+
+
+            const file =
+                input.files[0];
+
+
+            // Type
+            const allowedTypes = [
+                'application/pdf',
+                'image/png',
+                'image/jpeg'
+            ];
+
+            if (!allowedTypes.includes(file.type)) {
+
+                if (errorBox) {
+                    errorBox.innerText =
+                        'Only PDF, PNG, JPG and JPEG files are allowed';
+                }
+
+                input.classList.add('error-border');
+                input.value = '';
+
+                return;
+            }
+
+
+            // Size
+            if (file.size > 1024 * 1024) {
+
+                if (errorBox) {
+                    errorBox.innerText =
+                        'Voter ID proof size must not exceed 1 MB';
+                }
+
+                input.classList.add('error-border');
+                input.value = '';
+
+                return;
+            }
+
+
+            // PDF Preview
+            if (file.type === 'application/pdf') {
+
+                const pdfUrl =
+                    URL.createObjectURL(file);
+
+                preview.innerHTML = `
+                <iframe
+                    src="${pdfUrl}"
+                    width="100%"
+                    height="400px"
+                    style="border:1px solid #ddd;">
+                </iframe>
+            `;
+            }
+
+
+            // Image Preview
+            else {
+
+                const imageUrl =
+                    URL.createObjectURL(file);
+
+                preview.innerHTML = `
+                <img
+                    src="${imageUrl}"
+                    alt="Voter ID Preview"
+                    style="
+                        width:300px;
+                        max-height:300px;
+                        object-fit:contain;
+                        border:1px solid #ddd;
+                        border-radius:5px;
+                    ">
+            `;
+            }
+
+        };
+
+
+        // =========================================================
+        // FORM SUBMIT - FINAL JS VALIDATION + AJAX
+        // =========================================================
+        form.addEventListener('submit', function(e) {
+
+            e.preventDefault();
+
+
+            // -----------------------------------------------------
+            // Validate Step 4 first
+            // -----------------------------------------------------
+            if (!validateStep(currentStep)) {
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Validation Error',
+                    text: 'Please correct the highlighted fields.'
+                });
+
+                return;
+            }
+
+
+            // -----------------------------------------------------
+            // Validate ALL STEPS before AJAX
+            // -----------------------------------------------------
+            let firstInvalidStep = -1;
+
+            for (let i = 0; i < steps.length; i++) {
+
+                if (!validateStep(i)) {
+
+                    firstInvalidStep = i;
+
+                    break;
+                }
+            }
+
+
+            // If any previous step has an error
+            if (firstInvalidStep !== -1) {
+
+                currentStep = firstInvalidStep;
+
+                showStep(currentStep);
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Validation Error',
+                    text: 'Please correct the highlighted fields.'
+                });
+
+                return;
+            }
+
+
+            // -----------------------------------------------------
+            // Create FormData
+            // -----------------------------------------------------
+            const formData =
+                new FormData(form);
+
+
+            // -----------------------------------------------------
+            // CSRF
+            // -----------------------------------------------------
+            const csrfToken =
+                document.querySelector(
+                    'input[name="_token"]'
+                ).value;
+
+
+            // -----------------------------------------------------
+            // Submit button
+            // -----------------------------------------------------
+            const submitButton =
+                form.querySelector('.submit');
+
+            submitButton.disabled = true;
+
+            submitButton.innerText =
+                'Submitting...';
+
+
+            // -----------------------------------------------------
+            // Clear old errors
+            // -----------------------------------------------------
+            document.querySelectorAll(
+                '.error-message'
+            ).forEach(function(element) {
+
+                element.innerText = '';
+            });
+
+            document.querySelectorAll(
+                '.error-border'
+            ).forEach(function(element) {
+
+                element.classList.remove(
+                    'error-border'
+                );
+            });
+
+
+            // -----------------------------------------------------
+            // AJAX
+            // -----------------------------------------------------
+            fetch(form.action, {
+
+                    method: 'POST',
+
+                    body: formData,
+
+                    headers: {
+
+                        'X-CSRF-TOKEN': csrfToken,
+
+                        'Accept': 'application/json'
+                    }
+
+                })
+
+
+                // -----------------------------------------------------
+                // RESPONSE
+                // -----------------------------------------------------
+                .then(async function(response) {
+
+                    const data =
+                        await response.json();
+
+
+                    // Laravel validation error
+                    if (response.status === 422) {
+
+                        handleBackendErrors(
+                            data.errors
+                        );
+
+                        throw new Error(
+                            'VALIDATION_ERROR'
+                        );
+                    }
+
+
+                    // Server error
+                    if (!response.ok) {
+
+                        throw new Error(
+                            data.message ||
+                            'Something went wrong'
+                        );
+                    }
+
+
+                    return data;
+
+                })
+
+
+                // -----------------------------------------------------
+                // SUCCESS
+                // -----------------------------------------------------
+                .then(function(data) {
+
+                    if (data.status === true) {
+
+                        Swal.fire({
+
+                            icon: 'success',
+
+                            title: 'Registration Successful',
+
+                            text: data.message,
+
+                            confirmButtonText: 'OK'
+
+                        }).then(function() {
+
+                            // Reset form
+                            form.reset();
+
+
+                            // Reset photo preview
+                            const uploadedImage =
+                                document.getElementById(
+                                    'uploadedImage'
+                                );
+
+                            if (uploadedImage) {
+
+                                uploadedImage.src = '';
+
+                                uploadedImage.style.display =
+                                    'none';
+                            }
+
+
+                            // Reset ID proof preview
+                            const filePreview =
+                                document.getElementById(
+                                    'filePreview'
+                                );
+
+                            if (filePreview) {
+                                filePreview.innerHTML = '';
+                            }
+
+
+                            // Remove errors
+                            document.querySelectorAll(
+                                '.error-border'
+                            ).forEach(function(element) {
+
+                                element.classList.remove(
+                                    'error-border'
+                                );
+                            });
+
+
+                            document.querySelectorAll(
+                                '.error-message'
+                            ).forEach(function(element) {
+
+                                element.innerText = '';
+                            });
+
+
+                            // First step
+                            currentStep = 0;
+
+                            showStep(currentStep);
+
+                        });
+
+                    }
+
+                })
+
+
+                // -----------------------------------------------------
+                // ERROR
+                // -----------------------------------------------------
+                .catch(function(error) {
+
+                    console.error(error);
+
+
+                    // Don't show second Swal for validation errors
+                    if (
+                        error.message ===
+                        'VALIDATION_ERROR'
+                    ) {
+                        return;
+                    }
+
+
+                    Swal.fire({
+
+                        icon: 'error',
+
+                        title: 'Registration Failed',
+
+                        text: error.message ||
+                            'Unable to complete registration.'
+
+                    });
+
+                })
+
+
+                // -----------------------------------------------------
+                // FINALLY
+                // -----------------------------------------------------
+                .finally(function() {
+
+                    submitButton.disabled = false;
+
+                    submitButton.innerText =
+                        'Complete Registration';
+
+                });
+
         });
 
-        // =============================
-        // SUBMIT (AJAX + SWAL)
-        // =============================
 
-
-        // =============================
-        // HANDLE BACKEND ERRORS
-        // =============================
+        // =========================================================
+        // HANDLE LARAVEL BACKEND ERRORS
+        // =========================================================
         function handleBackendErrors(errors) {
 
             let firstErrorField = null;
+
             let errorMessages = [];
 
-            document.querySelectorAll('.error-message').forEach(el => el.innerText = "");
-            document.querySelectorAll('.error-border').forEach(el => el.classList.remove('error-border'));
 
-            Object.keys(errors).forEach(key => {
+            // Clear old errors
+            document.querySelectorAll(
+                '.error-message'
+            ).forEach(function(element) {
 
-                let input = document.querySelector(`[name="${key}"]`);
-                errorMessages.push(errors[key][0]);
-
-                if (input) {
-                    input.classList.add('error-border');
-
-                    let errorBox = input.closest('.form-group')?.querySelector('.error-message');
-
-                    if (errorBox) {
-                        errorBox.innerText = errors[key][0];
-                    }
-
-                    if (!firstErrorField) {
-                        firstErrorField = input;
-                    }
-                }
+                element.innerText = '';
             });
 
-            if (firstErrorField) {
-                let stepElement = firstErrorField.closest('.form-step');
-                let stepIndex = steps.indexOf(stepElement);
+            document.querySelectorAll(
+                '.error-border'
+            ).forEach(function(element) {
 
-                if (stepIndex !== -1) {
-                    currentStep = stepIndex;
-                    showStep(currentStep);
+                element.classList.remove(
+                    'error-border'
+                );
+            });
+
+
+            // Process errors
+            Object.keys(errors).forEach(function(key) {
+
+                const message =
+                    errors[key][0];
+
+                errorMessages.push(message);
+
+
+                // Radio buttons need special handling
+                const input =
+                    document.querySelector(
+                        `[name="${key}"]`
+                    );
+
+
+                if (input) {
+
+                    input.classList.add(
+                        'error-border'
+                    );
+
+
+                    const formGroup =
+                        input.closest('.form-group');
+
+
+                    const errorBox =
+                        formGroup?.querySelector(
+                            '.error-message'
+                        );
+
+
+                    if (errorBox) {
+
+                        errorBox.innerText =
+                            message;
+                    }
+
+
+                    if (!firstErrorField) {
+
+                        firstErrorField =
+                            input;
+                    }
                 }
 
-                setTimeout(() => {
+            });
+
+
+            // Move to first error step
+            if (firstErrorField) {
+
+                const stepElement =
+                    firstErrorField.closest(
+                        '.form-step'
+                    );
+
+
+                const stepIndex =
+                    steps.indexOf(stepElement);
+
+
+                if (stepIndex !== -1) {
+
+                    currentStep =
+                        stepIndex;
+
+                    showStep(
+                        currentStep
+                    );
+                }
+
+
+                setTimeout(function() {
+
                     firstErrorField.scrollIntoView({
+
                         behavior: 'smooth',
+
                         block: 'center'
+
                     });
+
                 }, 300);
             }
 
+
+            // Backend error popup
             Swal.fire({
+
                 icon: 'error',
+
                 title: 'Validation Error',
+
                 html: errorMessages.join('<br>')
+
             });
         }
 
-        // INIT
+
+        // =========================================================
+        // INITIAL STEP
+        // =========================================================
         showStep(currentStep);
 
     });
@@ -525,1206 +1554,81 @@
 </script>
 
 
+
 <script>
-    // ✅ DATA (extend this with full dataset)
-    const data = {
-        tamilnadu: {
-            Ariyalur: ["Ariyalur", "Jayankondam"],
-            Chengalpattu: ["Chengalpattu", "Cheyyur", "Madurantakam", "Pallavaram", "Tambaram", "Thiruporur"],
-            Chennai: ["Perambur", "Kolathur", "Thiru-Vi-Ka Nagar", "Madhavaram", "Thiruvottiyur",
-                "Dr. Radhakrishnan Nagar", "Harbour",
-                "Royapuram", "Egmore", "ChepaukThiruvallikeni", "Thousand Lights", "Anna Nagar",
-                "Villivakkam", "Ambattur", "Velachery",
-                "Sholinganallur", "Alandur", "Mylapore", "Maduravoyal", "Virugambakkam", "Saidapet", "T. Nagar",
-            ],
-            Coimbatore: ["Coimbatore North", "Coimbatore South", "Kavundampalayam", "Kinathukadavu",
-                "Mettuppalayam", "Pollachi", "Singanallur", "Sulur", "Thondamuthur", "Valparai"
-            ],
-            Cuddalore: ["Bhuvanagiri", "Chidambaram", "Cuddalore", "Kattumannarkoil", "Kurinjipadi", "Neyveli",
-                "Panruti", "Tittakudi", "Vridhachalam"
-            ],
-            Dharmapuri: ["Dharmapuri", "Harur", "Palacode", "Pappireddipatti", "Pennagaram"],
-            Dindigul: ["Athoor", "Dindigul", "Natham", "Nilakkottai", "Oddanchatram", "Palani", "Vedasandur"],
-            Erode: ["Anthiyur", "Bhavani", "Bhavanisagar", "Erode (East)", "Erode (West)", "Gobichettipalayam",
-                "Modakkurichi", "Perundurai"
-            ],
-            Kallakurichi: ["Kallakurichi", "Rishivandiyam", "Sankarapuram", "Ulundurpettai"],
-            Kanchipuram: ["Kancheepuram", "Sriperumbudur", "Uthiramerur"],
-            Kanniyakumari: ["Colachel", "Kanniyakumari", "Killiyoor", "Nagercoil", "Padmanabhapuram",
-                "Vilavancode"
-            ],
-            Karur: ["Aravakurichi", "Karur", "Krishnarayapuram", "Kulithalai"],
-            Krishnagiri: ["Bargur", "Hosur", "Krishnagiri", "Thally", "Uthangarai", "Veppanahalli"],
-            Madurai: ["Melur", " Madurai East", "Sholavandan", " Madurai North", "Madurai South",
-                "Madurai Central", "Madurai West", "Thiruparankundram", "Thirumangalam", "Usilampatti"
-            ],
-            Mayiladuthurai: ["Sirkazhi", "Mayiladuthurai", "Poompuhar"],
-            Nagapattinam: ["Nagapattinam", "Kilvelur", "Vedaranyam"],
-            Namakkal: ["Kumarapalayam", "Namakkal", "Paramathi-Velur", "Rasipuram", "Senthamangalam",
-                "Tiruchengodu"
-            ],
-            Nilgiris: ["Coonoor", "Gudalur", "Udhagamandalam"],
-            Perambalur: ["Kunnam", "Perambalur"],
-            Pudukkottai: ["Alangudi", "Aranthangi", "Gandarvakottai", "Pudukkottai", "Thirumayam", "Viralimalai"],
-            Ramanathapuram: ["Mudukulathur", "Paramakudi", "Ramanathapuram", "Tiruvadanai"],
-            Ranipet: ["Arakkonam", "Arcot", "Ranipet", "Sholinghur"],
-            Salem: ["Attur", "Edappadi", "Gangavalli", "Mettur", "Omalur", "Salem (North)", "Salem (South)",
-                "Salem (West)", "Sankari", "Veerapandi", "Yercaud"
-            ],
-            Sivaganga: ["Karaikudi", "Manamadurai", "Sivaganga", "Tiruppathur"],
-            Tenkasi: ["Sankarankovil", "Vasudevanallur", "Kadayanallur", "Tenkasi", "Alangulam"],
-            Thanjavur: ["Orathanadu", "Pattukottai", "Peravurani", "Thanjavur", "Thiruvidaimarudur", "Kumbakonam",
-                "Papanasam", "Thiruvayaru"
-            ],
-            Theni: ["Andipatti", "Periyakulam", "Bodinayakanur", "Cumbum"],
-            Thoothukudi: ["Ottapidaram", "Kovilpatti", "Vilathikulam", "Thoothukudi", "Tiruchendur",
-                "Srivaikuntam"
-            ],
+    function previewIdProof(input) {
 
-            Tiruchirappalli: [
-                "Manapparai",
-                "Srirangam",
-                "Tiruchirappalli East",
-                "Tiruchirappalli West",
-                "Thiruverumbur",
-                "Lalgudi",
-                "Manachanallur",
-                "Musiri",
-                "Thuraiyur"
-            ],
-            Tirunelveli: [
-                "Tirunelveli",
-                "Ambasamudram",
-                "Palayamkottai",
-                "Nanguneri",
-                "Radhapuram"
-            ],
-            Tirupattur: [
-                "Ambur",
-                "Jolarpet",
-                "Tirupattur",
-                "Vaniyambadi"
-            ],
-            Tiruppur: [
-                "Avanashi",
-                "Dharapuram",
-                "Kangayam",
-                "Madathukulam",
-                "Palladam",
-                "Tiruppur North",
-                "Tiruppur South",
-                "Udumalaipettai"
-            ],
+        const preview = document.getElementById('filePreview');
+        const errorBox = input.closest('.form-group').querySelector('.error-message');
 
-            Tiruvallur: [
-                "Avadi",
-                "Poonamallee",
-                "Gummidipoondi",
-                "Ponneri",
-                "Tiruvallur",
-                "Tiruttani"
-            ],
+        preview.innerHTML = '';
+        errorBox.innerText = '';
 
-            Tiruvannamalai: [
-                "Arani",
-                "Chengam",
-                "Cheyyar",
-                "Kalasapakkam",
-                "Kilpennathur",
-                "Polur",
-                "Tiruvannamalai",
-                "Vandavasi"
-            ],
-
-            Tiruvarur: [
-                "Mannargudi",
-                "Nannilam",
-                "Thiruthuraipoondi",
-                "Tiruvarur"
-            ],
-            Vellore: [
-                "Anaicut",
-                "Gudiyattam",
-                "Katpadi",
-                "Kilvaithinankuppam",
-                "Vellore"
-            ],
-
-            Viluppuram: [
-                "Gingee",
-                "Mailam",
-                "Tindivanam",
-                "Vanur",
-                "Vikravandi",
-                "Viluppuram",
-                "Tirukkoyilur"
-            ],
-
-            Virudhunagar: [
-                "Aruppukottai",
-                "Rajapalayam",
-                "Sattur",
-                "Sivakasi",
-                "Srivilliputhur",
-                "Tiruchuli",
-                "Virudhunagar"
-            ],
-
-        },
-
-        puducherry: {
-
-
-            Puducherry: [
-                "Mannadipet",
-                "Thirubuvanai",
-                "Ossudu",
-                "Mangalam",
-                "Villianur",
-                "Ozhukarai",
-                "Kadirgamam",
-                "Indira Nagar",
-                "Thattanchavady",
-
-                "Thattanchavady",
-                "Kamaraj Nagar",
-                "Lawspet",
-                "Kalapet",
-                "Muthialpet",
-                "Raj Bhavan",
-                "Oupalam",
-
-                "Orleampeth",
-                "Nellithope",
-                "Mudaliarpet",
-                "Ariankuppam",
-                "Manavely",
-                "Embalam",
-                "Nettapakkam",
-                "Bahour",
-
-            ],
-            Karaikal: [
-                "Nedungadu",
-                "Thirunallar",
-                "Karaikal North",
-                "Karaikal South",
-                "Neravy T.R. Pattinam",
-            ],
-            Mahe: [
-                "Mahe",
-
-            ],
-            Yanam: [
-                "Yanam",
-
-            ],
-
-
-        },
-
-        kerala: {
-            Alappuzha: [
-                "Aroor",
-                "Cherthala",
-                "Alappuzha",
-                "Ambalappuzha",
-                "Haripad",
-                "Kayamkulam",
-                "Mavelikkara",
-                "Chengannur",
-                "Kuttanad"
-            ],
-
-            Ernakulam: [
-                "Perumbavoor",
-                "Angamaly",
-                "Aluva",
-                "Kalamassery",
-                "Paravur",
-                "Vypin",
-                "Kochi",
-                "Thripunithura",
-                "Ernakulam",
-                "Kothamangalam",
-                "Muvattupuzha",
-                "Piravom",
-                "Kunnathunad",
-                "Thrikkakara"
-            ],
-
-            Idukki: [
-                "Devikulam",
-                "Udumbanchola",
-                "Thodupuzha",
-                "Idukki",
-                "Peerumade"
-            ],
-            Kannur: [
-                "Payyannur",
-                "Kalliasseri",
-                "Taliparamba",
-                "Irikkur",
-                "Azhikode",
-                "Kannur",
-                "Dharmadom",
-                "Thalassery",
-                "Kuthuparamba",
-                "Mattanur",
-                "Peravoor"
-            ],
-            Kasaragod: [
-                "Manjeshwaram",
-                "Kasaragod",
-                "Udma",
-                "Kanhangad",
-                "Trikaripur"
-            ],
-            Kollam: [
-                "Karunagappally",
-                "Chavara",
-                "Kunnathur",
-                "Kottarakkara",
-                "Pathanapuram",
-                "Punalur",
-                "Chadayamangalam",
-                "Kundara",
-                "Kollam",
-                "Eravipuram",
-                "Chathannoor"
-            ],
-            Kottayam: [
-                "Pala",
-                "Kaduthuruthy",
-                "Vaikom",
-                "Ettumanoor",
-                "Kottayam",
-                "Puthuppally",
-                "Changanassery",
-                "Kanjirappally",
-                "Poonjar"
-            ],
-            Kozhikode: [
-                "Vadakara",
-                "Kuttiady",
-                "Nadapuram",
-                "Koyilandy",
-                "Perambra",
-                "Balussery",
-                "Elathur",
-                "Kozhikode North",
-                "Kozhikode South",
-                "Beypore",
-                "Kunnamangalam",
-                "Koduvally",
-                "Thiruvambady"
-            ],
-
-            Malappuram: [
-                "Kondotty",
-                "Manjeri",
-                "Perinthalmanna",
-                "Mankada",
-                "Malappuram",
-                "Vengara",
-                "Vallikkunnu",
-                "Tirurangadi",
-                "Tanur",
-                "Tirur",
-                "Kottakkal",
-                "Thavanur",
-                "Ponnani",
-                "Thrithala",
-                "Ernad",
-                "Nilambur"
-            ],
-
-            Palakkad: [
-                "Shoranur",
-                "Ottapalam",
-                "Kongad",
-                "Mannarkkad",
-                "Malampuzha",
-                "Palakkad",
-                "Tarur",
-                "Chittur",
-                "Nenmara",
-                "Alathur",
-                "Chelakkara",
-                "Pattambi"
-            ],
-
-            Pathanamthitta: [
-                "Thiruvalla",
-                "Ranni",
-                "Aranmula",
-                "Konni",
-                "Adoor"
-            ],
-
-            Thiruvananthapuram: [
-                "Varkala",
-                "Attingal",
-                "Chirayinkeezhu",
-                "Nedumangad",
-                "Vamanapuram",
-                "Kazhakkoottam",
-                "Vattiyoorkavu",
-                "Thiruvananthapuram",
-                "Nemom",
-                "Aruvikkara",
-                "Parassala",
-                "Kattakkada",
-                "Kovalam",
-                "Neyyattinkara"
-            ],
-            Thrissur: [
-                "Guruvayoor",
-                "Manalur",
-                "Ollur",
-                "Thrissur",
-                "Nattika",
-                "Kaipamangalam",
-                "Irinjalakuda",
-                "Puthukkad",
-                "Kodungallur",
-                "Chalakudy",
-                "Kunnamkulam",
-                "Wadakkanchery",
-                "Chelakkara"
-            ],
-
-            Wayanad: [
-                "Mananthavady",
-                "Sulthan Bathery",
-                "Kalpetta"
-            ],
-
-        },
-
-        karnataka: {
-            Belagavi: [
-                "Nippani",
-                "Chikkodi-Sadalga",
-                "Athani",
-                "Kagwad",
-                "Kudachi",
-                "Raibag",
-                "Hukkeri",
-                "Arabhavi",
-                "Gokak",
-                "Yemkanmardi",
-                "Belgaum Uttar",
-                "Belgaum Dakshin",
-                "Belgaum Rural",
-                "Khanapur",
-                "Kittur",
-                "Bailhongal",
-                "Saundatti Yellamma",
-                "Ramdurg"
-            ],
-            Bagalkot: [
-                "Mudhol",
-                "Terdal",
-                "Jamkhandi",
-                "Bilgi",
-                "Badami",
-                "Bagalkot",
-                "Hungund"
-            ],
-
-            Vijayapura: [
-                "Muddebihal",
-                "Devar Hippargi",
-                "Basavana Bagevadi",
-                "Babaleshwar",
-                "Bijapur City",
-                "Nagathan",
-                "Indi",
-                "Sindagi"
-            ],
-            Kalaburagi: [
-                "Afzalpur",
-                "Jevargi",
-                "Chittapur",
-                "Sedam",
-                "Chincholi",
-                "Gulbarga Rural",
-                "Gulbarga Dakshin",
-                "Gulbarga Uttar",
-                "Aland"
-            ],
-            Yadgir: [
-                "Shorapur",
-                "Shahapur",
-                "Yadgir",
-                "Gurmitkal"
-            ],
-            Bidar: [
-                "Basavakalyan",
-                "Humnabad",
-                "Bidar South",
-                "Bidar",
-                "Bhalki",
-                "Aurad"
-            ],
-
-
-            Raichur: [
-                "Raichur Rural",
-                "Raichur",
-                "Manvi",
-                "Devadurga",
-                "Lingsugur",
-                "Sindhanur",
-                "Maski"
-            ],
-
-            Koppal: [
-                "Kushtagi",
-                "Kanakagiri",
-                "Gangawati",
-                "Yelburga",
-                "Koppal"
-            ],
-
-            Gadag: [
-                "Shirahatti",
-                "Gadag",
-                "Ron",
-                "Nargund"
-            ],
-
-            Dharwad: [
-                "Navalgund",
-                "Kundgol",
-                "Dharwad",
-                "Hubli-Dharwad East",
-                "Hubli-Dharwad Central",
-                "Hubli-Dharwad West",
-                "Kalghatgi"
-            ],
-
-            UttaraKannada: [
-                "Haliyal",
-                "Karwar",
-                "Kumta",
-                "Bhatkal",
-                "Sirsi",
-                "Yellapur"
-            ],
-
-            Haveri: [
-                "Hangal",
-                "Shiggaon",
-                "Haveri",
-                "Byadgi",
-                "Hirekerur",
-                "Ranebennur"
-            ],
-
-            Vijayanagara: [
-                "Hoovina Hadagali",
-                "Hagaribommanahalli",
-                "Vijayanagara",
-                "Kudligi",
-                "Harapanahalli"
-            ],
-
-            Ballari: [
-                "Kampli",
-                "Siruguppa",
-                "Bellary",
-                "Bellary City",
-                "Sandur"
-            ],
-
-            Chitradurga: [
-                "Molakalmuru",
-                "Challakere",
-                "Chitradurga",
-                "Hiriyur",
-                "Hosadurga",
-                "Holalkere"
-            ],
-            Davanagere: [
-                "Jagalur",
-                "Harihar",
-                "Davanagere North",
-                "Davanagere South",
-                "Mayakonda",
-                "Channagiri",
-                "Honnali"
-            ],
-            Shivamogga: [
-                "Shimoga Rural",
-                "Bhadravati",
-                "Shimoga",
-                "Tirthahalli",
-                "Shikaripura",
-                "Sorab",
-                "Sagar"
-            ],
-            Udupi: [
-                "Byndoor",
-                "Kundapura",
-                "Udupi",
-                "Kapu",
-                "Karkala"
-            ],
-            Chikkamagaluru: [
-                "Sringeri",
-                "Mudigere",
-                "Chikkamagaluru",
-                "Tarikere",
-                "Kadur"
-            ],
-            Tumakuru: [
-                "Chiknayakanhalli",
-                "Tiptur",
-                "Turuvekere",
-                "Kunigal",
-                "Tumkur City",
-                "Tumkur Rural",
-                "Koratagere",
-                "Gubbi",
-                "Sira",
-                "Pavagada",
-                "Madhugiri"
-            ],
-            Chikkaballapura: [
-                "Gauribidanur",
-                "Bagepalli",
-                "Chikkaballapur",
-                "Sidlaghatta",
-                "Chintamani"
-            ],
-            Kolar: [
-                "Srinivaspur",
-                "Mulbagal",
-                "Kolar Gold Fields",
-                "Bangarapet",
-                "Kolar",
-                "Malur"
-            ],
-            BengaluruUrban: [
-                "Yelahanka",
-                "Krishnarajapuram",
-                "Byatarayanapura",
-                "Yeshwantpur",
-                "Rajarajeshwarinagar",
-                "Dasarahalli",
-                "Mahalakshmi Layout",
-                "Malleshwaram",
-                "Hebbal",
-                "Pulakeshinagar",
-                "Sarvagnanagar",
-                "C. V. Raman Nagar",
-                "Shivajinagar",
-                "Shanti Nagar",
-                "Gandhi Nagar",
-                "Rajaji Nagar",
-                "Govindraj Nagar",
-                "Vijay Nagar",
-                "Chamrajpet",
-                "Chickpet",
-                "Basavanagudi",
-                "Padmanabhanagar",
-                "B.T.M. Layout",
-                "Jayanagar",
-                "Mahadevapura",
-                "Bommanahalli",
-                "Bangalore South",
-                "Anekal"
-            ],
-
-            BengaluruRural: [
-                "Hoskote",
-                "Devanahalli",
-                "Doddaballapur",
-                "Nelamangala"
-            ],
-            Ramanagara: [
-                "Magadi",
-                "Ramanagara",
-                "Kanakapura",
-                "Channapatna"
-            ],
-            Mandya: [
-                "Malavalli",
-                "Maddur",
-                "Melukote",
-                "Mandya",
-                "Shrirangapattana",
-                "Nagamangala",
-                "Krishnarajapet"
-            ],
-            Hassan: [
-                "Shravanabelagola",
-                "Arsikere",
-                "Belur",
-                "Hassan",
-                "Holenarasipur",
-                "Arkalgud",
-                "Sakleshpur"
-            ],
-
-            DakshinaKannada: [
-                "Belthangady",
-                "Moodabidri",
-                "Mangalore City North",
-                "Mangalore City South",
-                "Mangalore",
-                "Bantval",
-                "Puttur",
-                "Sullia"
-            ],
-            Kodagu: [
-                "Madikeri",
-                "Virajpet"
-            ],
-            Mysuru: [
-                "Periyapatna",
-                "Krishnarajanagara",
-                "Hunsur",
-                "Heggadadevankote",
-                "Nanjangud",
-                "Chamundeshwari",
-                "Krishnaraja",
-                "Chamaraja",
-                "Narasimharaja",
-                "Varuna",
-                "T. Narasipur"
-            ],
-            Chamarajanagar: [
-                "Hanur",
-                "Kollegal",
-                "Chamarajanagar",
-                "Gundlupet"
-            ],
-        },
-        telangana: {
-            Adilabad: [
-                "Adilabad",
-                "Boath",
-                "Khanapur"
-            ],
-            "Komaram Bheem Asifabad": [
-                "Asifabad",
-                "Sirpur"
-            ],
-            Mancherial: [
-                "Bellampalli",
-                "Mancherial",
-                "Chennur"
-            ],
-            Nirmal: [
-                "Mudhole",
-                "Nirmal",
-                "Khanapur"
-            ],
-            Nizamabad: [
-                "Nizamabad Urban",
-                "Nizamabad Rural",
-                "Armoor",
-                "Balkonda"
-            ],
-            Kamareddy: [
-                "Kamareddy",
-                "Jukkal",
-                "Banswada",
-                "Yellareddy"
-            ],
-            Karimnagar: [
-                "Karimnagar",
-                "Manakondur",
-                "Huzurabad",
-                "Choppadandi"
-            ],
-            Jagitial: [
-                "Jagitial",
-                "Dharmapuri",
-                "Korutla"
-            ],
-            Peddapalli: [
-                "Peddapalli",
-                "Manthani",
-                "Ramagundam"
-            ],
-            "Rajanna Sircilla": [
-                "Sircilla",
-                "Vemulawada",
-            ],
-            Siddipet: [
-                "Siddipet",
-                "Husnabad",
-                "Dubbak",
-                "Gajwel"
-            ],
-            Medak: [
-                "Medak",
-                "Narsapur",
-            ],
-            Sangareddy: [
-                "Sangareddy",
-                "Patancheru",
-                "Zaheerabad",
-                "Andole"
-            ],
-            "Medchal–Malkajgiri": [
-                "Malkajgiri",
-                "Quthbullapur",
-                "Kukatpally",
-                "Uppal",
-                "Medchal"
-            ],
-            Hyderabad: [
-                "Musheerabad",
-                "Malakpet",
-                "Amberpet",
-                "Khairatabad",
-                "Jubilee Hills",
-                "Sanathnagar",
-                "Nampally",
-                "Karwan",
-                "Goshamahal",
-                "Charminar",
-                "Chandrayangutta",
-                "Yakutpura",
-                "Bahadurpura"
-            ],
-
-            "Ranga Reddy": [
-                "Maheshwaram",
-                "Rajendranagar",
-                "Serilingampally",
-                "Chevella",
-                "Ibrahimpatnam",
-                "Parigi",
-                "Vikarabad",
-                "Tandur"
-            ],
-            Vikarabad: [
-                "Kodangal",
-            ],
-            Mahabubnagar: [
-                "Mahabubnagar",
-                "Jadcherla",
-                "Devarkadra",
-                "Narayanpet",
-            ],
-            Nagarkurnool: [
-                "Nagarkurnool",
-                "Achampet",
-                "Kalwakurthy",
-                "Kollapur",
-            ],
-            Wanaparthy: [
-                "Wanaparthy",
-            ],
-            "Jogulamba Gadwal": [
-                "Gadwal",
-                "Alampur",
-
-            ],
-            Nalgonda: [
-                "Nalgonda",
-                "Naketkal",
-                "Munugode",
-                "Miryalaguda",
-            ],
-            Suryapet: [
-                "Suryapet",
-                "Kodad",
-                "Huzurnagar",
-                "Thungathurthy",
-            ],
-            "Yadadri Bhuvanagiri": [
-                "Bhongir",
-                "Alair"
-            ],
-            Khammam: [
-                "Khammam",
-                "Palair",
-                "Madhira",
-                "Wyra",
-            ],
-            "Bhadradri Kothagudem": [
-                "Bhadrachalam",
-                "Yellandu",
-                "Kothagudem",
-                "Pinapaka",
-                "Aswaraopeta"
-            ],
-            Mahabubabad: [
-                "Mahabubabad",
-                "Dornakal"
-            ],
-            "Warangal Rural": [
-                "Parkal",
-                "Wardhannapet"
-            ],
-            Hanamkonda: [
-                "Warangal West",
-                "Warangal East"
-            ],
-            Jangaon: [
-                "Jangaon",
-                "Palakurthi"
-            ],
-        },
-        andhra_pradesh: {
-            Adilabad: [
-                "Adilabad",
-                "Boath",
-                "Khanapur"
-            ],
-
-            "Srikakulam": [
-                "Ichchapuram",
-                "Palasa",
-                "Tekkali",
-                "Pathapatnam",
-                "Srikakulam",
-                "Amadalavalasa",
-                "Etcherla",
-                "Narasannapeta",
-                "Rajam",
-                "Palakonda"
-            ],
-
-            "Vizianagaram": [
-                "Bobbili",
-                "Cheepurupalli",
-                "Gajapathinagaram",
-                "Nellimarla",
-                "Vizianagaram",
-                "Srungavarapukota"
-            ],
-
-            "Parvathipuram Manyam": [
-                "Kurupam",
-                "Parvathipuram",
-                "Salur",
-                "Palakonda"
-            ],
-
-            "Visakhapatnam": [
-                "Visakhapatnam East",
-                "Visakhapatnam South",
-                "Visakhapatnam North",
-                "Visakhapatnam West",
-                "Bheemili",
-                "Gajuwaka"
-            ],
-
-            "Anakapalli": [
-                "Chodavaram",
-                "Madugula",
-                "Anakapalle",
-                "Pendurthi",
-                "Payakaraopet",
-                "Narsipatnam"
-            ],
-
-            "Alluri Sitharama Raju": [
-                "Araku Valley",
-                "Paderu",
-                "Rampachodavaram"
-            ],
-
-            "Kakinada": [
-                "Tuni",
-                "Pithapuram",
-                "Kakinada Rural",
-                "Kakinada City",
-                "Jaggampeta",
-                "Prathipadu",
-                "Peddapuram"
-            ],
-
-            "East Godavari": [
-                "Anaparthy",
-                "Rajanagaram",
-                "Rajahmundry City",
-                "Rajahmundry Rural",
-                "Mandapeta",
-                "Ramachandrapuram",
-                "Kothapeta",
-                "Kovvur",
-                "Nidadavole"
-            ],
-
-            "Konaseema": [
-                "Mummidivaram",
-                "Amalapuram",
-                "Razole",
-                "Gannavaram",
-                "Kothapeta",
-                "Mandapeta"
-            ],
-
-            "West Godavari": [
-                "Achanta",
-                "Palakollu",
-                "Narasapuram",
-                "Bhimavaram",
-                "Undi",
-                "Tanuku",
-                "Tadepalligudem"
-            ],
-
-            "Eluru": [
-                "Unguturu",
-                "Denduluru",
-                "Eluru",
-                "Gopalapuram",
-                "Polavaram",
-                "Chintalapudi"
-            ],
-
-            "NTR": [
-                "Tiruvuru",
-                "Nuzvid",
-                "Gannavaram",
-                "Vijayawada West",
-                "Vijayawada Central",
-                "Vijayawada East",
-                "Mylavaram"
-            ],
-
-            "Krishna": [
-                "Gudivada",
-                "Kaikalur",
-                "Pedana",
-                "Machilipatnam",
-                "Avanigadda",
-                "Pamarru",
-                "Penamaluru"
-            ],
-
-            "Guntur": [
-                "Tadikonda",
-                "Mangalagiri",
-                "Tenali",
-                "Guntur West",
-                "Guntur East",
-                "Prathipadu"
-            ],
-
-            "Palnadu": [
-                "Pedakurapadu",
-                "Narasaraopet",
-                "Sattenapalli",
-                "Vinukonda",
-                "Gurazala",
-                "Macherla"
-            ],
-
-            "Bapatla": [
-                "Vemuru",
-                "Repalle",
-                "Bapatla",
-                "Ponnur",
-                "Addanki",
-                "Chirala"
-            ],
-
-            "Prakasam": [
-                "Yerragondapalem",
-                "Darsi",
-                "Parchur",
-                "Santhanuthalapadu",
-                "Ongole",
-                "Kandukur",
-                "Kondapi",
-                "Markapuram",
-                "Giddalur",
-                "Kanigiri"
-            ],
-
-            "SPSR Nellore": [
-                "Kavali",
-                "Atmakur",
-                "Kovur",
-                "Nellore City",
-                "Nellore Rural",
-                "Sarvepalli",
-                "Gudur",
-                "Sullurpeta",
-                "Udayagiri"
-            ],
-            "Tirupati": [
-                "Tirupati",
-                "Srikalahasti",
-                "Satyavedu",
-                "Venkatagiri"
-            ],
-
-            "Chittoor": [
-                "Kuppam",
-                "Gangadhara Nellore",
-                "Chittoor",
-                "Puthalapattu",
-                "Palamaner",
-                "Nagari",
-                "Punganur"
-            ],
-
-            "Annamayya": [
-                "Rajampet",
-                "Rayachoti",
-                "Madanapalle",
-                "Thamballapalle",
-                "Pileru",
-                "Railway Koduru"
-            ],
-
-            "YSR Kadapa": [
-                "Badvel",
-                "Kadapa",
-                "Kamalapuram",
-                "Jammalamadugu",
-                "Proddatur",
-                "Pulivendula",
-                "Mydukur"
-            ],
-
-            "Nandyal": [
-                "Allagadda",
-                "Srisailam",
-                "Nandikotkur",
-                "Nandyal",
-                "Banaganapalle",
-                "Dhone"
-            ],
-
-            "Kurnool": [
-                "Kurnool",
-                "Panyam",
-                "Kodumur",
-                "Yemmiganur",
-                "Mantralayam",
-                "Adoni",
-                "Alur"
-            ],
-
-            "Anantapur": [
-                "Rayadurg",
-                "Uravakonda",
-                "Guntakal",
-                "Tadipatri",
-                "Singanamala",
-                "Anantapur Urban",
-                "Kalyandurg",
-                "Raptadu"
-            ],
-
-            "Sri Sathya Sai": [
-                "Madakasira",
-                "Hindupur",
-                "Penukonda",
-                "Puttaparthi",
-                "Dharmavaram",
-                "Kadiri"
-            ]
-        }
-
-    };
-
-    const state = document.getElementById("state");
-    const district = document.getElementById("district");
-    const assembly = document.getElementById("assembly");
-    const otherBox = document.getElementById("otherBox");
-    const otherInput = otherBox.querySelector("input");
-
-    otherBox.style.display = "none";
-
-    // =============================
-    // STATE CHANGE
-    // =============================
-    state.addEventListener("change", function() {
-
-        const districtGroup = district.closest('.form-group');
-        const assemblyGroup = assembly.closest('.form-group');
-
-        district.innerHTML = '<option value="">Select District</option>';
-        assembly.innerHTML = '<option value="">Select Assembly</option>';
-
-        otherBox.style.display = "none";
-
-        // 🔥 STATE = OTHERS
-        if (this.value === "others") {
-
-            // hide full groups
-            districtGroup.style.display = "none";
-            assemblyGroup.style.display = "none";
-
-
-
-            // ✅ make other_details required
-            otherInput.setAttribute("required", "required");
-
-            otherBox.style.display = "block";
+        if (!input.files || !input.files[0]) {
             return;
         }
 
-        // ✅ SHOW BACK
-        districtGroup.style.display = "block";
-        assemblyGroup.style.display = "block";
+        const file = input.files[0];
 
+        const allowedTypes = [
+            'application/pdf',
+            'image/png',
+            'image/jpeg'
+        ];
 
+        if (!allowedTypes.includes(file.type)) {
 
-        // ❌ remove required from other_details
-        otherInput.removeAttribute("required");
+            errorBox.innerText =
+                'Only PDF, PNG, JPG and JPEG files are allowed.';
 
-        if (!data[this.value]) return;
+            input.value = '';
 
-        const districts = data[this.value];
-
-        for (let d in districts) {
-            let option = document.createElement("option");
-            option.value = d;
-            option.textContent = d;
-            district.appendChild(option);
-        }
-    });
-
-    // =============================
-    // DISTRICT CHANGE
-    // =============================
-    district.addEventListener("change", function() {
-
-        const assemblyGroup = assembly.closest('.form-group');
-
-        assembly.innerHTML = '<option value="">Select Assembly</option>';
-
-        otherBox.style.display = "none";
-
-        if (this.value === "others") {
-
-            assemblyGroup.style.display = "none";
-            assembly.removeAttribute("required");
-
-            otherInput.setAttribute("required", "required");
-            otherBox.style.display = "block";
             return;
         }
 
-        assemblyGroup.style.display = "block";
+        const maxSize = 1024 * 1024;
 
-        otherInput.removeAttribute("required");
+        if (file.size > maxSize) {
 
-        const assemblies = data[state.value][this.value];
-        if (!assemblies) return;
+            errorBox.innerText =
+                'Voter ID proof size must be less than 1 MB.';
 
-        assemblies.forEach(a => {
-            let option = document.createElement("option");
-            option.value = a;
-            option.textContent = a;
-            assembly.appendChild(option);
-        });
-    });
+            input.value = '';
+
+            return;
+        }
+
+        if (file.type === 'application/pdf') {
+
+            const pdfUrl = URL.createObjectURL(file);
+
+            preview.innerHTML = `
+            <iframe
+                src="${pdfUrl}"
+                width="100%"
+                height="400px"
+                style="border:1px solid #ddd;">
+            </iframe>
+        `;
+
+        } else {
+
+            const imageUrl = URL.createObjectURL(file);
+
+            preview.innerHTML = `
+            <img
+                src="${imageUrl}"
+                alt="Voter ID Preview"
+                style="
+                    width:300px;
+                    max-height:300px;
+                    object-fit:contain;
+                    border:1px solid #ddd;
+                    border-radius:5px;
+                ">
+        `;
+        }
+    }
 </script>
 </body>
 

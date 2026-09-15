@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- bootstrap css -->
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
 
@@ -31,13 +32,13 @@
     <link href="{{ asset('assets/css/nice-select.min.css') }}" rel="stylesheet">
 
     <!-- Style CSS -->
-    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/style.css?v.1') }}" rel="stylesheet">
 
     <!-- Main CSS -->
-    <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/main.css?v.1') }}" rel="stylesheet">
 
     <!-- Register CSS -->
-    <link href="{{ asset('assets/css/register.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/register.css?v.1') }}" rel="stylesheet">
 
     <!-- Responsive CSS -->
     <link href="{{ asset('assets/css/responsive.css') }}" rel="stylesheet">
@@ -46,7 +47,7 @@
     <link href="{{ asset('assets/css/theme-dark.css') }}" rel="stylesheet">
 
     <!-- Title -->
-    <title>Podhu Makkal Iyyam</title>
+    <title>Tamilaga Podhu Makkal Iyakkam</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/images/logo/PMI_logo.png" />
@@ -61,7 +62,7 @@
                     <div class="left">
                         <span>Watch:</span>
                         <a href="#">
-                            Podhu Makkal Iyakkam
+                            Tamilaga Podhu Makkal Iyakkam
                             <i class="icofont-long-arrow-right"></i>
                         </a>
                     </div>
@@ -121,7 +122,9 @@
             <div class="container">
                 <nav class="navbar navbar-expand-md navbar-light">
                     <a class="navbar-brand" href="index.html">
-                        <img src="assets/images/logo/PMI_logo.png" alt="Logo" />
+                        <img src="assets/images/logo/pmilogo.png" alt="Logo" /> <span>
+                            Tamilaga Podhu Makkal Iyakkam
+                        </span>
                     </a>
                     <div
                         class="collapse navbar-collapse mean-menu"
@@ -149,7 +152,7 @@
                         </ul>
 
                         <div class="side-nav">
-                            <a class="right common-btn two" href="{{route('member-register')}}">Member Registration</a>
+                            <a class="right common-btn two" href="{{route('member-register')}}">Join With Us</a>
                         </div>
                     </div>
                 </nav>

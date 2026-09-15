@@ -85,37 +85,40 @@
 <!-- End Banner -->
 
 <!-- About -->
-<div class="about-area two pt-100 pb-70">
-    <div class="about-shape">
-        <img src="assets/images/about-shape1.png" alt="Shape" />
-    </div>
+<div class="about-area two pt-50 pb-70">
+
     <div class="container">
         <div class="row align-items-center justify-content-center">
-            <div class="col-lg-6">
+            <div class="col-lg-8">
                 <div class="about-content">
                     <div class="section-title two">
                         <span class="sub-title">About The Leader</span>
                         <h2>Meet The Leader Of The Future <span>Rajesh</span></h2>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                            Consectetur numquam magnam, sed perspiciatis mollitia nesciunt
-                            amet, consequuntur error culpa nobis dolore asperiores eum non
-                            quasi
-                        </p>
+
+
+                        <ul>
+                            <li> Rajesh is committed to working closely with the people and understanding the challenges faced by communities across Tamil Nadu. With a strong belief in public participation and social responsibility, he strives to bring people together and encourage collective action for the betterment of society.
+                            </li>
+                            <li>
+                                His vision is to build an organization that remains connected to the people, listens to their voices, and works towards practical solutions for their concerns.
+                            </li>
+                            <li> Under his leadership, Tamilaga Podhu Makkal Iyakkam aims to strengthen community participation, encourage young people to take an active role in society, and support initiatives that contribute to the welfare and development of Tamil Nadu.</li>
+                            <li></li>
+                        </ul>
+
+
+
+
+
+
+
+
                     </div>
-                    <ul class="align-items-center">
-                        <li>
-                            <img src="assets/images/signature.png" alt="Signature" />
-                        </li>
-                        <li>
-                            <h3>Rajesh</h3>
-                            <span>Chairman, Rajesh</span>
-                        </li>
-                    </ul>
+
                 </div>
             </div>
 
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 <div class="about-img">
                     <img src="assets/images/about_img.jpg" alt="About" />
                     <!-- <img src="assets/images/about-main2.jpg" alt="About" /> -->

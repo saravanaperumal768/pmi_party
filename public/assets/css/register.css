@@ -127,8 +127,11 @@
   font-size: 15px;
   transition: all 0.3s ease;
   background: #f8fafc;
+  display: block !important;
 }
-
+.form-group .nice-select {
+  display: none;
+}
 .form-group input:focus,
 .form-group select:focus {
   border-color: var(--main-600);
@@ -159,7 +162,7 @@
 }
 
 #registrationForm button.prev {
-  background: #f7fafc;
+  background: #fbe1f2;
   color: #4a5568;
 }
 

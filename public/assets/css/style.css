@@ -113,10 +113,10 @@ button:focus {
   border: 0;
   border-radius: 0;
   transition: 0.5s all ease;
-  color: #fff;
-  background-color: #f00041;
-  padding: 12px 25px;
-  font-weight: 500;
+  color: #292b75;
+  font-weight: bold;
+  /* background-color: #f00041; */
+  padding: 12px 10px;
 }
 .common-btn:before {
   position: absolute;
@@ -149,7 +149,9 @@ button:focus {
   width: 100%;
 }
 .common-btn.two {
-  background-color: #292b75;
+  /* background-color: #292b75; */
+  border: 2px solid #292b75;
+  border-radius: 15px;
 }
 .common-btn.two:before {
   background-color: #182c4f;
@@ -275,7 +277,7 @@ button:focus {
 /*-- Navbar --*/
 .main-nav {
   background: #fff;
-  box-shadow: 0px 0px 20px 0px rgba(221, 221, 221, 0.3098039216);
+  box-shadow: 0px 0px 20px 0px rgb(42 43 118);
   transition: 0.5s all ease;
   padding-top: 0;
   padding-bottom: 0;
@@ -285,7 +287,7 @@ button:focus {
 }
 .main-nav nav .navbar-brand {
   margin-right: 0;
-  padding: 0;
+  padding: 5px;
   padding-top: 10px;
   position: relative;
   transition: 0.5s all ease;
@@ -293,7 +295,7 @@ button:focus {
 .main-nav nav .navbar-brand img {
   transition: 0.5s all ease;
 }
-.main-nav nav .navbar-brand:before {
+/* .main-nav nav .navbar-brand:before {
   position: absolute;
   content: "";
   width: 150px;
@@ -313,10 +315,10 @@ button:focus {
   border-right: 15px solid transparent;
   border-top: 13px solid #dedede;
   transition: 0.5s all ease;
-}
+} */
 .main-nav nav .navbar-nav {
   margin-left: auto;
-  margin-right: auto;
+  /* margin-right: auto; */
 }
 .main-nav nav .navbar-nav .nav-item:hover a {
   color: #f00041;
@@ -324,8 +326,8 @@ button:focus {
 .main-nav nav .navbar-nav .nav-item a {
   font-weight: 800;
   color: #2a2a2a;
-  margin-left: 12px;
-  margin-right: 27px;
+  /* margin-left: 12px;
+  margin-right: 27px; */
   text-transform: unset;
   position: relative;
   transition: 0.5s all ease;
@@ -430,13 +432,13 @@ button:focus {
 }
 .main-nav.menu-shrink {
   padding-top: 10px;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
 }
 .main-nav.menu-shrink nav .navbar-brand {
   padding-top: 0;
 }
 .main-nav.menu-shrink nav .navbar-brand img {
-  max-width: 80px;
+  max-width: 60px;
 }
 .main-nav.menu-shrink nav .navbar-brand:before {
   opacity: 0;
@@ -758,26 +760,18 @@ button:focus {
 .about-area .about-content ul {
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  background-color: #005bb5;
-  text-align: center;
+  display: block;
+
+  text-align: left;
 }
 .about-area .about-content ul li {
   list-style-type: none;
   display: inline-block;
   padding-top: 15px;
-  padding-bottom: 15px;
+  font-weight: 600;
+  list-style-type: circle;
 }
-.about-area .about-content ul li:nth-child(1) {
-  flex: 0 0 50%;
-  max-width: 50%;
-  border-right: 1px solid #fff;
-}
-.about-area .about-content ul li:nth-child(2) {
-  flex: 0 0 50%;
-  max-width: 50%;
-}
+
 .about-area .about-content ul li h3 {
   font-size: 20px;
   margin-bottom: 3px;
@@ -1780,11 +1774,9 @@ button:focus {
   max-width: 230px;
 }
 .about-area.two .about-content .section-title.two h2 span {
-  color: #292b75;
+  color: #189548;
 }
-.about-area.two .about-content ul {
-  background-color: #182c4f;
-}
+
 .about-area.two .about-img {
   position: relative;
 }
