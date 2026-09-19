@@ -41,7 +41,7 @@
     <link href="{{ asset('assets/css/register.css?v.1') }}" rel="stylesheet">
 
     <!-- Responsive CSS -->
-    <link href="{{ asset('assets/css/responsive.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/responsive.css?v.1') }}" rel="stylesheet">
 
     <!-- Theme Dark CSS -->
     <link href="{{ asset('assets/css/theme-dark.css') }}" rel="stylesheet">
@@ -81,23 +81,23 @@
                                     <i class="icofont-twitter"></i>
                                 </a>
                             </li>
-                            <li>
-                                <a href="https://www.google.co.uk/" target="_blank">
-                                    <i class="icofont-google-plus"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://www.linkedin.com/" target="_blank">
-                                    <i class="icofont-linkedin"></i>
-                                </a>
-                            </li>
+
+
                         </ul>
 
+
+
                         <div class="nav-flag-dropdown">
-                            <select>
-                                <option>English</option>
-                                <option>தமிழ்</option>
-                            </select>
+                            <a href="{{ route('language.change', 'en') }}"
+                                class="{{ app()->getLocale() == 'en' ? 'active' : '' }}">
+                                English
+                            </a>
+                            <a href="{{ route('language.change', 'ta') }}"
+                                class="{{ app()->getLocale() == 'ta' ? 'active' : '' }}">
+                                தமிழ்
+                            </a>
+
+
                         </div>
                     </div>
                 </div>

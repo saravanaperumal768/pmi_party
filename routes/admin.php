@@ -1,9 +1,14 @@
 <?php
 
-use App\Http\Controllers\Admin\LoginController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\LoginController;
+Route::prefix('admin')
+    ->name('admin.')
+    ->group(function () {
 
-Route::prefix('admin')->name('admin.')->middleware('web')->group(function () {
-
-    Route::get('/', [LoginController::class, 'index'])->name('index');
-});
+        // Route::get('/', function () {
+        //     return 'ADMIN WORKING';
+        // })->name('index');
+        
+        Route::get('/', [LoginController::class, 'index'])->name('index');
+    });

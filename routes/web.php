@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\IndexController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PmiRegistrationController;
 use App\Models\pmi_registration;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,13 @@ Route::get('/member-register', [IndexController::class, 'member_register'])->nam
 
 // Route::get('/member-register', [PmiRegistrationController::class, 'member_register'])
 //     ->name('member.register');
-
 Route::post('/member-register', [PmiRegistrationController::class, 'store'])
     ->name('pmi.registration.store');
+
+Route::get('/get-const/{district_id}', [IndexController::class, 'getConst']);
+Route::get('/get-taluk/{district_id}', [IndexController::class, 'getTaluk']);
+Route::get('/get-block/{district_id}', [IndexController::class, 'getBlock']);
+
+
+Route::get('/language/{lang}', [LanguageController::class, 'change'])
+    ->name('language.change');

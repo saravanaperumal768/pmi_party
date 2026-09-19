@@ -109,8 +109,8 @@
 
                                     <div class="col-md-3">
                                         <label class="d-flex align-items-center">
-                                            <input type="radio" name="gender" value="others">
-                                            <span class="ms-2">Others</span>
+                                            <input type="radio" name="gender" value="Transgender">
+                                            <span class="ms-2">Transgender</span>
                                         </label>
                                     </div>
 
@@ -122,14 +122,14 @@
                                 <div class="form-group row">
                                     <label class="col-12">Marital Status</label>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-5">
                                         <label class="d-flex align-items-center">
-                                            <input type="radio" name="martialstatus" value="Single" required>
-                                            <span class="ms-2">Single</span>
+                                            <input type="radio" name="martialstatus" value="Un-Married" required>
+                                            <span class="ms-2">Un-Married</span>
                                         </label>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-5">
                                         <label class="d-flex align-items-center">
                                             <input type="radio" name="martialstatus" value="Married">
                                             <span class="ms-2">Married</span>
@@ -247,7 +247,7 @@
                                         <option value="">Select District</option>
 
                                         @foreach($district as $row)
-                                        <option value="{{ $row->id }}">
+                                        <option value="{{ $row->district_code }}">
                                             {{ $row->districtname_eng }}
                                         </option>
                                         @endforeach
@@ -264,13 +264,6 @@
 
                                     <select id="constitution" name="constitution">
                                         <option value="">Select Assembly Constitution</option>
-
-                                        @foreach($const as $row)
-                                        <option value="{{ $row->id }}">
-                                            {{ $row->acname_eng }}
-                                        </option>
-                                        @endforeach
-
                                     </select>
 
                                     <div class="error-message"></div>
@@ -286,13 +279,6 @@
 
                                     <select id="taluk" name="taluk">
                                         <option value="">Select Taluk</option>
-
-                                        @foreach($taluk as $row)
-                                        <option value="{{ $row->id }}">
-                                            {{ $row->taluk_name_eng }}
-                                        </option>
-                                        @endforeach
-
                                     </select>
 
                                     <div class="error-message"></div>
@@ -305,13 +291,6 @@
 
                                     <select id="block" name="block">
                                         <option value="">Select Block</option>
-
-                                        @foreach($block as $row)
-                                        <option value="{{ $row->id }}">
-                                            {{ $row->block_name_eng }}
-                                        </option>
-                                        @endforeach
-
                                     </select>
 
                                     <div class="error-message"></div>
@@ -489,3 +468,35 @@
 </section>
 
 @include('include.footer')
+<script>
+$(document).ready(function() {
+    $('#district').on('change', function() {
+        var districtId = $(this).val();
+// 		alert(districtId);
+
+        $('#constitution').html('<option value="">Select Assembly Constitution</option>');
+        $('#taluk').html('<option value="">Select Taluk</option>');
+        $('#block').html('<option value="">Select Block</option>');
+
+        if (districtId) {
+            $.get('/get-const/' + districtId, function(data) {
+                $.each(data, function(key, row) {
+                    $('#constitution').append('<option value="'+row.id+'">'+row.acname_eng+'</option>');
+                });
+            });
+
+            $.get('/get-taluk/' + districtId, function(data) {
+                $.each(data, function(key, row) {
+                    $('#taluk').append('<option value="'+row.id+'">'+row.taluk_name_eng+'</option>');
+                });
+            });
+
+            $.get('/get-block/' + districtId, function(data) {
+                $.each(data, function(key, row) {
+                    $('#block').append('<option value="'+row.id+'">'+row.block_name_eng+'</option>');
+                });
+            });
+        }
+    });
+});
+</script>

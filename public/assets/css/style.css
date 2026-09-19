@@ -496,11 +496,11 @@ button:focus {
 .banner-content {
   position: relative;
   z-index: 1;
-  max-width: 830px;
+  max-width: 100%;
 }
 .banner-content h1 {
   color: #fff;
-  font-size: 70px;
+  font-size: 50px;
   margin-bottom: 15px;
 }
 .banner-content p {
@@ -852,12 +852,14 @@ button:focus {
   text-align: center;
   transition: 0.5s all ease;
   margin-bottom: 30px;
+  /* border: 1px solid #000; */
 }
 .ideology-item:hover {
   transform: translate(0, -10px);
 }
 .ideology-item img {
   width: auto;
+  border-radius: 15px;
 }
 .ideology-item .bottom {
   background-color: #f00041;
@@ -1607,7 +1609,7 @@ button:focus {
   background-position: center center;
   background-repeat: no-repeat;
   position: relative;
-  height: 700px;
+  height: 550px;
 }
 .banner-area-two .banner-slider-item:before {
   position: absolute;
@@ -1616,7 +1618,7 @@ button:focus {
   height: 100%;
   top: 0;
   left: 0;
-  background-color: #292b75;
+  background-color: #292b75d6;
   opacity: 0.9;
 }
 .banner-area-two .banner-slider-item .slider-img img {
@@ -1822,7 +1824,7 @@ button:focus {
   height: 100%;
   top: 0;
   left: 0;
-  background-color: #182c4f;
+  background-color: none;
   opacity: 0.7;
 }
 .election-area h2 {

@@ -1,0 +1,32 @@
+:root {
+  --main-600: #292b75;
+}
+
+.navbar-brand img {
+  max-width: 60px;
+}
+
+.navbar-brand span {
+  font-size: 19px;
+  color: #292b75;
+
+  background: -webkit-linear-gradient(#292b75, #3e5a9a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.pt-50 {
+  padding-top: 50px;
+}
+.member_regi h2 {
+  color: #292b75;
+
+  background: -webkit-linear-gradient(#292b75, #3e9a8d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.joinus img {
+  border-radius: 15px;
+  border: 1px solid #1691a3;
+  padding: 5px;
+}

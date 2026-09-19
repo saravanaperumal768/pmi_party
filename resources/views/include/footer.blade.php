@@ -2,38 +2,17 @@
 <footer class="footer-area two pt-100">
     <div class="container">
         <div class="row justify-content-center">
+
             <div class="col-sm-6 col-lg-3">
                 <div class="footer-item">
-                    <div class="footer-logo">
-                        <a class="logo" href="index.html">
-                            <img src="assets/images/logo/PMI_logo.png" alt="Logo" />
-                        </a>
-                        <p></p>
-                        <ul>
-                            <li>
-                                <a href="https://www.facebook.com/login/" target="_blank">
-                                    <i class="icofont-facebook"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://twitter.com/i/flow/login" target="_blank">
-                                    <i class="icofont-twitter"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://www.linkedin.com/" target="_blank">
-                                    <i class="icofont-linkedin"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://www.google.co.uk/" target="_blank">
-                                    <i class="icofont-google-plus"></i>
-                                </a>
-                            </li>
-                        </ul>
+                    <div class="footer-contact">
+                        <img src="assets/images/logo/PMI_logo.png">
+
+
                     </div>
                 </div>
             </div>
+
 
             <div class="col-sm-6 col-lg-3">
                 <div class="footer-item">
@@ -51,7 +30,7 @@
                             </li>
                             <li>
                                 <i class="icofont-ui-call"></i>
-                                <a href="tel:+9100000000">+91000000 000000</a>
+                                <a href="tel:+9100000000">+919876543210</a>
 
                             </li>
                             <li>
@@ -115,7 +94,11 @@
                 <div class="footer-item">
                     <div class="footer-events">
                         <h3>Location</h3>
-
+                        <a class="logo" href="index.html">
+                            <!--img src="assets/images/logo/PMI_logo.png" alt="Logo" /00>
+                            <!--img src="assets/images/logo/PMI_logo.png" alt="Logo" /-->
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.715169017104!2d80.26386004287329!3d12.990060868527948!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a525dbc7d2be5ef%3A0xf40965dfecb3c46!2sNavabharat%20housing%20board.!5e0!3m2!1sen!2sin!4v1789547666994!5m2!1sen!2sin" width="100%" height="150%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                        </a>
                     </div>
                 </div>
             </div>

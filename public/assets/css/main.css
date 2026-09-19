@@ -30,3 +30,14 @@
   border: 1px solid #1691a3;
   padding: 5px;
 }
+
+.nav-flag-dropdown a {
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.nav-flag-dropdown a.active {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.15);
+}
