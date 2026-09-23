@@ -1,5 +1,5 @@
 <!-- Footer -->
-<footer class="footer-area two pt-100">
+<footer class="footer-area two pt-100" id="footer">
     <div class="container">
         <div class="row justify-content-center">
 
@@ -55,36 +55,20 @@
                                     <i class="icofont-simple-right"></i>About Us
                                 </a>
                             </li>
+
                             <li>
-                                <a href="events.html">
-                                    <i class="icofont-simple-right"></i>
-                                    Events
-                                </a>
-                            </li>
-                            <li>
-                                <a href="blog.html">
+                                <a href="#">
                                     <i class="icofont-simple-right"></i>
                                     Blog
                                 </a>
                             </li>
-                            <li>
-                                <a href="faq.html">
-                                    <i class="icofont-simple-right"></i>
-                                    FAQ
-                                </a>
-                            </li>
-                            <li>
+                             <li>
                                 <a href="#">
                                     <i class="icofont-simple-right"></i>
-                                    Donation
+                                    Contact
                                 </a>
                             </li>
-                            <li>
-                                <a href="privacy-policy.html">
-                                    <i class="icofont-simple-right"></i>
-                                    Privacy Policy
-                                </a>
-                            </li>
+
                         </ul>
                     </div>
                 </div>
@@ -169,293 +153,143 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
 
-        const form = document.getElementById('registrationForm');
-        const steps = Array.from(document.querySelectorAll('.form-step'));
-        const stepItems = Array.from(document.querySelectorAll('.step-item'));
+    const form = document.getElementById('registrationForm');
 
-        let currentStep = 0;
+    if (!form) {
+        return;
+    }
 
-        // =========================================================
-        // SHOW STEP
-        // =========================================================
-        function showStep(stepIndex) {
+    const steps = Array.from(
+        document.querySelectorAll('.form-step')
+    );
 
-            steps.forEach((step, index) => {
-                step.classList.toggle('active', index === stepIndex);
-            });
+    const stepItems = Array.from(
+        document.querySelectorAll('.step-item')
+    );
 
-            updateStepIndicators();
+    let currentStep = 0;
+
+
+    // =========================================================
+    // SHOW STEP
+    // =========================================================
+    function showStep(stepIndex) {
+
+        steps.forEach(function (step, index) {
+
+            step.classList.toggle(
+                'active',
+                index === stepIndex
+            );
+
+        });
+
+        updateStepIndicators();
+    }
+
+
+    // =========================================================
+    // STEP INDICATORS
+    // =========================================================
+    function updateStepIndicators() {
+
+        stepItems.forEach(function (item, index) {
+
+            item.classList.toggle(
+                'active',
+                index === currentStep
+            );
+
+            item.classList.toggle(
+                'completed',
+                index < currentStep
+            );
+
+        });
+    }
+
+
+    // =========================================================
+    // CLEAR FIELD ERROR
+    // =========================================================
+    function clearFieldError(input) {
+
+        if (!input) {
+            return;
         }
 
+        input.classList.remove('error-border');
 
-        // =========================================================
-        // STEP INDICATORS
-        // =========================================================
-        function updateStepIndicators() {
+        const formGroup =
+            input.closest('.form-group');
 
-            stepItems.forEach((item, index) => {
-
-                item.classList.toggle(
-                    'active',
-                    index === currentStep
-                );
-
-                item.classList.toggle(
-                    'completed',
-                    index < currentStep
-                );
-            });
+        if (!formGroup) {
+            return;
         }
 
+        const errorBox =
+            formGroup.querySelector('.error-message');
 
-        // =========================================================
-        // CLEAR FIELD ERROR
-        // =========================================================
-        function clearFieldError(input) {
+        if (errorBox) {
+            errorBox.innerText = '';
+        }
+    }
 
-            input.classList.remove('error-border');
 
-            const formGroup = input.closest('.form-group');
+    // =========================================================
+    // SHOW FIELD ERROR
+    // =========================================================
+    function showFieldError(input, message) {
 
-            if (!formGroup) {
-                return;
-            }
-
-            const errorBox =
-                formGroup.querySelector('.error-message');
-
-            if (errorBox) {
-                errorBox.innerText = '';
-            }
+        if (!input) {
+            return;
         }
 
+        input.classList.add('error-border');
 
-        // =========================================================
-        // SHOW FIELD ERROR
-        // =========================================================
-        function showFieldError(input, message) {
+        const formGroup =
+            input.closest('.form-group');
 
-            input.classList.add('error-border');
-
-            const formGroup = input.closest('.form-group');
-
-            if (!formGroup) {
-                return;
-            }
-
-            const errorBox =
-                formGroup.querySelector('.error-message');
-
-            if (errorBox) {
-                errorBox.innerText = message;
-            }
+        if (!formGroup) {
+            return;
         }
 
+        const errorBox =
+            formGroup.querySelector('.error-message');
 
-        // =========================================================
-        // VALIDATE TEXT / SELECT / TEXTAREA
-        // =========================================================
-        // =========================================================
-        // VALIDATE REQUIRED TEXT / SELECT / TEXTAREA
-        // =========================================================
-        function validateRequiredField(input) {
+        if (errorBox) {
+            errorBox.innerText = message;
+        }
+    }
 
-            if (!input) {
-                return false;
-            }
 
-            const value = String(input.value || '').trim();
+    // =========================================================
+    // VALIDATE REQUIRED FIELD
+    // TEXT / SELECT / TEXTAREA
+    // =========================================================
+    function validateRequiredField(input) {
 
-            // SELECT validation
-            if (input.tagName === 'SELECT') {
-
-                // Empty or default value "0"
-                if (value === '' || value === '0') {
-
-                    showFieldError(
-                        input,
-                        'Please select an option'
-                    );
-
-                    return false;
-                }
-
-                clearFieldError(input);
-                return true;
-            }
-
-            // TEXT / TEXTAREA validation
-            if (value === '') {
-
-                showFieldError(
-                    input,
-                    'This field is required'
-                );
-
-                return false;
-            }
-
-            clearFieldError(input);
-
-            return true;
+        if (!input) {
+            return false;
         }
 
-
-        // =========================================================
-        // VALIDATE MOBILE
-        // =========================================================
-        function validateMobile() {
-
-            const input =
-                document.getElementById('mobile_number');
-
-            if (!input) return true;
-
-            const value = input.value.trim();
-
-            if (!value) {
-                showFieldError(
-                    input,
-                    'Mobile number is required'
-                );
-                return false;
-            }
-
-            if (!/^[6-9][0-9]{9}$/.test(value)) {
-
-                showFieldError(
-                    input,
-                    'Enter valid 10 digit mobile number'
-                );
-
-                return false;
-            }
-
-            clearFieldError(input);
-
-            return true;
-        }
+        const value =
+            String(input.value || '').trim();
 
 
-        // =========================================================
-        // VALIDATE EMAIL
-        // =========================================================
-        function validateEmail() {
-
-            const input =
-                document.getElementById('email');
-
-            if (!input) return true;
-
-            const value = input.value.trim();
-
-            if (!value) {
-
-                showFieldError(
-                    input,
-                    'Email is required'
-                );
-
-                return false;
-            }
-
-            const emailRegex =
-                /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-            if (!emailRegex.test(value)) {
-
-                showFieldError(
-                    input,
-                    'Enter a valid email address'
-                );
-
-                return false;
-            }
-
-            clearFieldError(input);
-
-            return true;
-        }
-
-
-        // =========================================================
-        // VALIDATE DOB
-        // =========================================================
-        function validateDOB() {
-
-            const input = document.getElementById('dob');
-
-            if (!input) {
-                return true;
-            }
-
-            const value = String(input.value || '').trim();
-
-            // Empty DOB
-            if (value === '') {
-
-                showFieldError(
-                    input,
-                    'Date of birth is required'
-                );
-
-                return false;
-            }
-
-            const dobDate = new Date(value + 'T00:00:00');
-
-            if (isNaN(dobDate.getTime())) {
-
-                showFieldError(
-                    input,
-                    'Please enter a valid date of birth'
-                );
-
-                return false;
-            }
-
-            // Today
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            // Future / today
-            if (dobDate >= today) {
-
-                showFieldError(
-                    input,
-                    'Date of birth must be before today'
-                );
-
-                return false;
-            }
-
-            // Calculate age
-            let age =
-                today.getFullYear() -
-                dobDate.getFullYear();
-
-            const monthDifference =
-                today.getMonth() -
-                dobDate.getMonth();
+        // SELECT
+        if (input.tagName === 'SELECT') {
 
             if (
-                monthDifference < 0 ||
-                (
-                    monthDifference === 0 &&
-                    today.getDate() < dobDate.getDate()
-                )
+                value === '' ||
+                value === '0'
             ) {
-                age--;
-            }
-
-            // Below 18
-            if (age < 18) {
 
                 showFieldError(
                     input,
-                    'You must be 18 years or older to apply'
+                    'Please select an option'
                 );
 
                 return false;
@@ -463,620 +297,1190 @@
 
             clearFieldError(input);
 
-            // Store calculated age in hidden field
-            const ageInput =
-                document.getElementById('age');
-
-            if (ageInput) {
-                ageInput.value = age;
-            }
-
             return true;
         }
 
 
-        // =========================================================
-        // VALIDATE RADIO GROUP
-        // =========================================================
-        function validateRadioGroup(stepElement, name) {
+        // TEXT / TEXTAREA
+        if (value === '') {
 
-            const radios =
-                stepElement.querySelectorAll(
-                    `input[name="${name}"]`
-                );
+            showFieldError(
+                input,
+                'This field is required'
+            );
 
-            if (!radios.length) {
-                return true;
-            }
-
-            const checked =
-                stepElement.querySelector(
-                    `input[name="${name}"]:checked`
-                );
-
-            const formGroup =
-                radios[0].closest('.form-group');
-
-            const errorBox =
-                formGroup?.querySelector('.error-message');
-
-            if (!checked) {
-
-                if (errorBox) {
-                    errorBox.innerText =
-                        'Please select an option';
-                }
-
-                return false;
-            }
-
-            if (errorBox) {
-                errorBox.innerText = '';
-            }
-
-            return true;
+            return false;
         }
 
+        clearFieldError(input);
 
-        // =========================================================
-        // FILE VALIDATION
-        // =========================================================
-        function validateFile(input, allowedTypes, maxSize, message) {
+        return true;
+    }
 
-            if (!input) {
-                return false;
-            }
 
-            // No file selected
-            if (!input.files || input.files.length === 0) {
+    // =========================================================
+    // VALIDATE MOBILE
+    // =========================================================
+    function validateMobile() {
 
-                showFieldError(
-                    input,
-                    'This file is required'
-                );
-
-                return false;
-            }
-
-            const file = input.files[0];
-
-            // File type
-            if (!allowedTypes.includes(file.type)) {
-
-                showFieldError(
-                    input,
-                    message
-                );
-
-                return false;
-            }
-
-            // File size
-            if (file.size > maxSize) {
-
-                showFieldError(
-                    input,
-                    'File size must not exceed 1 MB'
-                );
-
-                return false;
-            }
-
-            // Valid
-            clearFieldError(input);
-
-            return true;
-        }
-
-
-        // =========================================================
-        // VALIDATE CURRENT STEP
-        // =========================================================
-        function validateStep(stepIndex) {
-
-            const currentStepElement =
-                steps[stepIndex];
-
-            let isValid = true;
-
-
-            // =====================================================
-            // STEP 1
-            // =====================================================
-            if (stepIndex === 0) {
-
-                const requiredFields = [
-                    'name',
-                    'father_name',
-                    'community',
-                ];
-
-                requiredFields.forEach(function(name) {
-
-                    const input =
-                        currentStepElement.querySelector(
-                            `[name="${name}"]`
-                        );
-
-                    if (input) {
-
-                        if (!validateRequiredField(input)) {
-                            isValid = false;
-                        }
-                    }
-                });
-
-
-                // IMPORTANT: DOB validation
-                if (!validateDOB()) {
-                    isValid = false;
-                }
-
-
-                // Gender
-                if (!validateRadioGroup(
-                        currentStepElement,
-                        'gender'
-                    )) {
-                    isValid = false;
-                }
-
-
-                // Marital status
-                if (!validateRadioGroup(
-                        currentStepElement,
-                        'martialstatus'
-                    )) {
-                    isValid = false;
-                }
-            }
-
-
-            // =====================================================
-            // STEP 2
-            // =====================================================
-            if (stepIndex === 1) {
-
-                const requiredFields = [
-                    'blood_group',
-                    'qualification',
-                    'occupation',
-                    'social_media'
-                ];
-
-                requiredFields.forEach(function(name) {
-
-                    const input =
-                        currentStepElement.querySelector(
-                            `[name="${name}"]`
-                        );
-
-                    if (input) {
-
-                        if (!validateRequiredField(input)) {
-                            isValid = false;
-                        }
-                    }
-                });
-
-
-                // Mobile
-                if (!validateMobile()) {
-                    isValid = false;
-                }
-
-
-                // Email
-                if (!validateEmail()) {
-                    isValid = false;
-                }
-            }
-
-
-            // =====================================================
-            // STEP 3
-            // =====================================================
-            if (stepIndex === 2) {
-
-                const requiredFields = [
-                    'state',
-                    'constitution',
-                    'district',
-                    'taluk',
-                    'block',
-                    'part',
-                    'address'
-                ];
-
-                requiredFields.forEach(function(name) {
-
-                    const input =
-                        currentStepElement.querySelector(
-                            `[name="${name}"]`
-                        );
-
-                    if (input) {
-
-                        if (!validateRequiredField(input)) {
-                            isValid = false;
-                        }
-                    }
-                });
-
-
-                // Other details is optional
-                const otherDetails =
-                    currentStepElement.querySelector(
-                        '[name="other_details"]'
-                    );
-
-                if (otherDetails) {
-                    clearFieldError(otherDetails);
-                }
-            }
-
-
-            // =====================================================
-            // STEP 4
-            // =====================================================
-            // =====================================================
-            // STEP 4 - ID PROOF
-            // =====================================================
-            if (stepIndex === 3) {
-
-                // PHOTO
-                const photo = document.getElementById('photo');
-
-                if (photo) {
-
-                    if (!validateFile(
-                            photo,
-                            ['image/png', 'image/jpeg'],
-                            1024 * 1024,
-                            'Only PNG, JPG and JPEG images are allowed'
-                        )) {
-                        isValid = false;
-                    }
-                }
-
-
-                // VOTER ID
-                const voterId =
-                    document.getElementById('voter_id');
-
-                if (voterId) {
-
-                    if (!validateRequiredField(voterId)) {
-                        isValid = false;
-                    }
-                }
-
-
-                // VOTER ID PROOF
-                const idProof =
-                    document.getElementById('id_proof');
-
-                if (idProof) {
-
-                    if (!validateFile(
-                            idProof,
-                            [
-                                'application/pdf',
-                                'image/png',
-                                'image/jpeg'
-                            ],
-                            1024 * 1024,
-                            'Only PDF, PNG, JPG and JPEG files are allowed'
-                        )) {
-                        isValid = false;
-                    }
-                }
-            }
-
-
-            return isValid;
-        }
-
-
-        // =========================================================
-        // NEXT BUTTON
-        // =========================================================
-        document.querySelectorAll('.next').forEach(function(button) {
-
-            button.addEventListener('click', function() {
-
-                // Validate current step FIRST
-                const valid =
-                    validateStep(currentStep);
-
-                if (!valid) {
-
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Validation Error',
-                        text: 'Please correct the highlighted fields.'
-                    });
-
-                    return;
-                }
-
-
-                // Move to next step
-                if (currentStep < steps.length - 1) {
-
-                    currentStep++;
-
-                    showStep(currentStep);
-
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
-                }
-
-            });
-
-        });
-
-
-        // =========================================================
-        // PREVIOUS BUTTON
-        // =========================================================
-        document.querySelectorAll('.prev').forEach(function(button) {
-
-            button.addEventListener('click', function() {
-
-                if (currentStep > 0) {
-
-                    currentStep--;
-
-                    showStep(currentStep);
-
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
-                }
-
-            });
-
-        });
-
-
-        // =========================================================
-        // MOBILE INPUT
-        // =========================================================
-        const mobile =
+        const input =
             document.getElementById('mobile_number');
 
-        if (mobile) {
+        if (!input) {
+            return true;
+        }
 
-            mobile.addEventListener('input', function() {
+        const value =
+            input.value.trim();
 
+
+        // Empty
+        if (value === '') {
+
+            showFieldError(
+                input,
+                'Mobile number is required'
+            );
+
+            return false;
+        }
+
+
+        // Must start 6-9 and contain exactly 10 digits
+        if (!/^[6-9][0-9]{9}$/.test(value)) {
+
+            showFieldError(
+                input,
+                'Enter a valid 10 digit mobile number starting with 6, 7, 8, or 9'
+            );
+
+            return false;
+        }
+
+
+        clearFieldError(input);
+
+        return true;
+    }
+
+
+    // =========================================================
+    // VALIDATE EMAIL
+    // =========================================================
+    function validateEmail() {
+
+        const input =
+            document.getElementById('email');
+
+        if (!input) {
+            return true;
+        }
+
+        const value =
+            input.value.trim();
+
+
+        if (value === '') {
+
+            showFieldError(
+                input,
+                'Email is required'
+            );
+
+            return false;
+        }
+
+
+        const emailRegex =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+        if (!emailRegex.test(value)) {
+
+            showFieldError(
+                input,
+                'Enter a valid email address'
+            );
+
+            return false;
+        }
+
+
+        clearFieldError(input);
+
+        return true;
+    }
+
+
+    // =========================================================
+    // VALIDATE DOB
+    // =========================================================
+    function validateDOB() {
+
+        const input =
+            document.getElementById('dob');
+
+        if (!input) {
+            return true;
+        }
+
+        const value =
+            String(input.value || '').trim();
+
+
+        // Empty
+        if (value === '') {
+
+            showFieldError(
+                input,
+                'Date of birth is required'
+            );
+
+            return false;
+        }
+
+
+        const dobDate =
+            new Date(value + 'T00:00:00');
+
+
+        if (isNaN(dobDate.getTime())) {
+
+            showFieldError(
+                input,
+                'Please enter a valid date of birth'
+            );
+
+            return false;
+        }
+
+
+        // Today
+        const today = new Date();
+
+        today.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+
+        // Future / today
+        if (dobDate >= today) {
+
+            showFieldError(
+                input,
+                'Date of birth must be before today'
+            );
+
+            return false;
+        }
+
+
+        // Calculate age
+        let age =
+            today.getFullYear() -
+            dobDate.getFullYear();
+
+
+        const monthDifference =
+            today.getMonth() -
+            dobDate.getMonth();
+
+
+        if (
+            monthDifference < 0 ||
+            (
+                monthDifference === 0 &&
+                today.getDate() < dobDate.getDate()
+            )
+        ) {
+
+            age--;
+        }
+
+
+        // Below 18
+        if (age < 18) {
+
+            showFieldError(
+                input,
+                'You must be 18 years or older to apply'
+            );
+
+            return false;
+        }
+
+
+        clearFieldError(input);
+
+
+        // Store age
+        const ageInput =
+            document.getElementById('age');
+
+        if (ageInput) {
+            ageInput.value = age;
+        }
+
+
+        return true;
+    }
+
+
+    // =========================================================
+    // VALIDATE VOTER ID
+    // Format: ABC1234567
+    // 3 letters + 7 numbers
+    // =========================================================
+    function validateVoterId() {
+
+        const input =
+            document.getElementById('voter_id');
+
+        if (!input) {
+            return true;
+        }
+
+
+        const value =
+            input.value
+                .trim()
+                .toUpperCase();
+
+
+        // Empty
+        if (value === '') {
+
+            showFieldError(
+                input,
+                'Voter ID is required'
+            );
+
+            return false;
+        }
+
+
+        // Exactly 3 letters + 7 digits
+        if (!/^[A-Z]{3}[0-9]{7}$/.test(value)) {
+
+            showFieldError(
+                input,
+                'Enter a valid Voter ID (e.g. ABC1234567)'
+            );
+
+            return false;
+        }
+
+
+        input.value = value;
+
+        clearFieldError(input);
+
+        return true;
+    }
+
+
+    // =========================================================
+    // VALIDATE RADIO GROUP
+    // =========================================================
+    function validateRadioGroup(
+        stepElement,
+        name
+    ) {
+
+        const radios =
+            stepElement.querySelectorAll(
+                `input[name="${name}"]`
+            );
+
+
+        if (!radios.length) {
+            return true;
+        }
+
+
+        const checked =
+            stepElement.querySelector(
+                `input[name="${name}"]:checked`
+            );
+
+
+        const formGroup =
+            radios[0].closest('.form-group');
+
+
+        const errorBox =
+            formGroup?.querySelector(
+                '.error-message'
+            );
+
+
+        if (!checked) {
+
+            if (errorBox) {
+
+                errorBox.innerText =
+                    'Please select an option';
+            }
+
+            radios.forEach(function (radio) {
+
+                radio.classList.add(
+                    'error-border'
+                );
+
+            });
+
+            return false;
+        }
+
+
+        if (errorBox) {
+            errorBox.innerText = '';
+        }
+
+
+        radios.forEach(function (radio) {
+
+            radio.classList.remove(
+                'error-border'
+            );
+
+        });
+
+
+        return true;
+    }
+
+
+    // =========================================================
+    // FILE VALIDATION
+    // =========================================================
+    function validateFile(
+        input,
+        allowedTypes,
+        maxSize,
+        message
+    ) {
+
+        if (!input) {
+            return false;
+        }
+
+
+        // No file
+        if (
+            !input.files ||
+            input.files.length === 0
+        ) {
+
+            showFieldError(
+                input,
+                'This file is required'
+            );
+
+            return false;
+        }
+
+
+        const file =
+            input.files[0];
+
+
+        // File type
+        if (!allowedTypes.includes(file.type)) {
+
+            showFieldError(
+                input,
+                message
+            );
+
+            return false;
+        }
+
+
+        // File size
+        if (file.size > maxSize) {
+
+            showFieldError(
+                input,
+                'File size must not exceed 1 MB'
+            );
+
+            return false;
+        }
+
+
+        clearFieldError(input);
+
+        return true;
+    }
+
+
+    // =========================================================
+    // VALIDATE CURRENT STEP
+    // =========================================================
+    function validateStep(stepIndex) {
+
+        const currentStepElement =
+            steps[stepIndex];
+
+
+        if (!currentStepElement) {
+            return true;
+        }
+
+
+        let isValid = true;
+
+
+        // =====================================================
+        // STEP 1
+        // =====================================================
+        if (stepIndex === 0) {
+
+            const requiredFields = [
+                'name',
+                'father_name',
+                'community'
+            ];
+
+
+            requiredFields.forEach(function (name) {
+
+                const input =
+                    currentStepElement.querySelector(
+                        `[name="${name}"]`
+                    );
+
+
+                if (input) {
+
+                    if (
+                        !validateRequiredField(input)
+                    ) {
+
+                        isValid = false;
+                    }
+                }
+
+            });
+
+
+            // DOB
+            if (!validateDOB()) {
+                isValid = false;
+            }
+
+
+            // Gender
+            if (
+                !validateRadioGroup(
+                    currentStepElement,
+                    'gender'
+                )
+            ) {
+
+                isValid = false;
+            }
+
+
+            // Marital status
+            if (
+                !validateRadioGroup(
+                    currentStepElement,
+                    'martialstatus'
+                )
+            ) {
+
+                isValid = false;
+            }
+        }
+
+
+        // =====================================================
+        // STEP 2
+        // =====================================================
+        if (stepIndex === 1) {
+
+            const requiredFields = [
+                'blood_group',
+                'qualification',
+                'occupation'
+            ];
+
+
+            requiredFields.forEach(function (name) {
+
+                const input =
+                    currentStepElement.querySelector(
+                        `[name="${name}"]`
+                    );
+
+
+                if (input) {
+
+                    if (
+                        !validateRequiredField(input)
+                    ) {
+
+                        isValid = false;
+                    }
+                }
+
+            });
+
+
+            // Mobile
+            if (!validateMobile()) {
+                isValid = false;
+            }
+
+
+            // Email
+            if (!validateEmail()) {
+                isValid = false;
+            }
+        }
+
+
+        // =====================================================
+        // STEP 3
+        // =====================================================
+        if (stepIndex === 2) {
+
+            const requiredFields = [
+                'state',
+                'constitution',
+                'district',
+                'taluk',
+                'block',
+                'part',
+                'address'
+            ];
+
+
+            requiredFields.forEach(function (name) {
+
+                const input =
+                    currentStepElement.querySelector(
+                        `[name="${name}"]`
+                    );
+
+
+                if (input) {
+
+                    if (
+                        !validateRequiredField(input)
+                    ) {
+
+                        isValid = false;
+                    }
+                }
+
+            });
+
+
+            // Other details optional
+            const otherDetails =
+                currentStepElement.querySelector(
+                    '[name="other_details"]'
+                );
+
+
+            if (otherDetails) {
+                clearFieldError(otherDetails);
+            }
+        }
+
+
+        // =====================================================
+        // STEP 4
+        // PHOTO / VOTER ID / ID PROOF
+        // =====================================================
+        if (stepIndex === 3) {
+
+
+            // -------------------------------------------------
+            // PHOTO
+            // -------------------------------------------------
+            const photo =
+                document.getElementById('photo');
+
+
+            if (photo) {
+
+                if (
+                    !validateFile(
+                        photo,
+                        [
+                            'image/png',
+                            'image/jpeg'
+                        ],
+                        1024 * 1024,
+                        'Only PNG, JPG and JPEG images are allowed'
+                    )
+                ) {
+
+                    isValid = false;
+                }
+            }
+
+
+            // -------------------------------------------------
+            // VOTER ID
+            // -------------------------------------------------
+            if (!validateVoterId()) {
+
+                isValid = false;
+            }
+
+
+            // -------------------------------------------------
+            // ID PROOF
+            // -------------------------------------------------
+            const idProof =
+                document.getElementById('id_proof');
+
+
+            if (idProof) {
+
+                if (
+                    !validateFile(
+                        idProof,
+                        [
+                            'application/pdf',
+                            'image/png',
+                            'image/jpeg'
+                        ],
+                        1024 * 1024,
+                        'Only PDF, PNG, JPG and JPEG files are allowed'
+                    )
+                ) {
+
+                    isValid = false;
+                }
+            }
+
+        }
+
+
+        return isValid;
+    }
+
+
+    // =========================================================
+    // NEXT BUTTON
+    // =========================================================
+    document
+        .querySelectorAll('.next')
+        .forEach(function (button) {
+
+            button.addEventListener(
+                'click',
+                function () {
+
+
+                    // Validate current step
+                    const valid =
+                        validateStep(currentStep);
+
+
+                    if (!valid) {
+
+                        Swal.fire({
+
+                            icon: 'warning',
+
+                            title: 'Validation Error',
+
+                            text:
+                                'Please correct the highlighted fields.'
+
+                        });
+
+                        return;
+                    }
+
+
+                    // Next step
+                    if (
+                        currentStep <
+                        steps.length - 1
+                    ) {
+
+                        currentStep++;
+
+                        showStep(currentStep);
+
+
+                        window.scrollTo({
+
+                            top: 0,
+
+                            behavior: 'smooth'
+
+                        });
+                    }
+
+                }
+            );
+
+        });
+
+
+    // =========================================================
+    // PREVIOUS BUTTON
+    // =========================================================
+    document
+        .querySelectorAll('.prev')
+        .forEach(function (button) {
+
+            button.addEventListener(
+                'click',
+                function () {
+
+                    if (currentStep > 0) {
+
+                        currentStep--;
+
+                        showStep(currentStep);
+
+
+                        window.scrollTo({
+
+                            top: 0,
+
+                            behavior: 'smooth'
+
+                        });
+                    }
+
+                }
+            );
+
+        });
+
+
+    // =========================================================
+    // MOBILE INPUT
+    // =========================================================
+    const mobile =
+        document.getElementById('mobile_number');
+
+
+    if (mobile) {
+
+        mobile.addEventListener(
+            'input',
+            function () {
+
+
+                // Numbers only
                 this.value =
-                    this.value.replace(/\D/g, '')
-                    .substring(0, 10);
+                    this.value
+                        .replace(/\D/g, '')
+                        .substring(0, 10);
 
+
+                // Validate only after 10 digits
                 if (this.value.length === 10) {
+
                     validateMobile();
+
                 } else {
+
                     clearFieldError(this);
                 }
 
-            });
-        }
+            }
+        );
 
 
-        // =========================================================
-        // EMAIL INPUT
-        // =========================================================
-        const email =
-            document.getElementById('email');
+        mobile.addEventListener(
+            'blur',
+            function () {
 
-        if (email) {
+                if (this.value.trim() !== '') {
 
-            email.addEventListener('blur', function() {
+                    validateMobile();
+                }
 
-                if (this.value.trim()) {
+            }
+        );
+
+    }
+
+
+    // =========================================================
+    // VOTER ID INPUT
+    // =========================================================
+    const voterId =
+        document.getElementById('voter_id');
+
+
+    if (voterId) {
+
+
+        voterId.addEventListener(
+            'input',
+            function () {
+
+
+                // Uppercase
+                this.value =
+                    this.value
+                        .toUpperCase()
+                        .replace(/[^A-Z0-9]/g, '')
+                        .substring(0, 10);
+
+
+                // Clear old error while typing
+                clearFieldError(this);
+
+
+                // Validate when 10 characters entered
+                if (this.value.length === 10) {
+
+                    validateVoterId();
+                }
+
+            }
+        );
+
+
+        voterId.addEventListener(
+            'blur',
+            function () {
+
+                validateVoterId();
+
+            }
+        );
+
+
+        voterId.addEventListener(
+            'change',
+            function () {
+
+                validateVoterId();
+
+            }
+        );
+
+    }
+
+
+    // =========================================================
+    // EMAIL INPUT
+    // =========================================================
+    const email =
+        document.getElementById('email');
+
+
+    if (email) {
+
+        email.addEventListener(
+            'blur',
+            function () {
+
+                if (
+                    this.value.trim() !== ''
+                ) {
+
                     validateEmail();
                 }
 
-            });
-        }
+            }
+        );
+
+    }
 
 
-        // =========================================================
-        // DOB - SET MAX DATE
-        // =========================================================
-        const dob =
-            document.getElementById('dob');
-
-        if (dob) {
-
-            const today =
-                new Date().toISOString().split('T')[0];
-
-            dob.setAttribute('max', today);
-        }
+    // =========================================================
+    // DOB - SET MAX DATE
+    // =========================================================
+    const dob =
+        document.getElementById('dob');
 
 
-        // =========================================================
-        // PHOTO PREVIEW
-        // =========================================================
-        window.previewImage = function(input) {
+    if (dob) {
 
-            const image =
-                document.getElementById('uploadedImage');
-
-            const formGroup =
-                input.closest('.form-group');
-
-            const errorBox =
-                formGroup?.querySelector('.error-message');
+        const today =
+            new Date()
+                .toISOString()
+                .split('T')[0];
 
 
-            image.style.display = 'none';
+        dob.setAttribute(
+            'max',
+            today
+        );
+
+    }
+
+
+    // =========================================================
+    // PHOTO PREVIEW
+    // =========================================================
+    window.previewImage = function (input) {
+
+
+        const image =
+            document.getElementById(
+                'uploadedImage'
+            );
+
+
+        const formGroup =
+            input.closest('.form-group');
+
+
+        const errorBox =
+            formGroup?.querySelector(
+                '.error-message'
+            );
+
+
+        if (image) {
+
+            image.style.display =
+                'none';
+
             image.src = '';
 
-            if (errorBox) {
-                errorBox.innerText = '';
-            }
-
-            input.classList.remove('error-border');
+        }
 
 
-            if (!input.files || !input.files.length) {
-                return;
-            }
+        if (errorBox) {
+            errorBox.innerText = '';
+        }
 
 
-            const file =
-                input.files[0];
+        input.classList.remove(
+            'error-border'
+        );
 
 
-            // Type
-            if (![
-                    'image/png',
-                    'image/jpeg'
-                ].includes(file.type)) {
+        if (
+            !input.files ||
+            !input.files.length
+        ) {
 
-                if (errorBox) {
-                    errorBox.innerText =
-                        'Only PNG, JPG and JPEG images are allowed';
-                }
-
-                input.classList.add('error-border');
-                input.value = '';
-
-                return;
-            }
+            return;
+        }
 
 
-            // Size
-            if (file.size > 1024 * 1024) {
-
-                if (errorBox) {
-                    errorBox.innerText =
-                        'Photo size must not exceed 1 MB';
-                }
-
-                input.classList.add('error-border');
-                input.value = '';
-
-                return;
-            }
+        const file =
+            input.files[0];
 
 
-            // Preview
-            const reader =
-                new FileReader();
-
-            reader.onload = function(event) {
-
-                image.src =
-                    event.target.result;
-
-                image.style.display =
-                    'block';
-            };
-
-            reader.readAsDataURL(file);
-        };
-
-
-        // =========================================================
-        // ID PROOF PREVIEW
-        // =========================================================
-        window.previewIdProof = function(input) {
-
-            const preview =
-                document.getElementById('filePreview');
-
-            const formGroup =
-                input.closest('.form-group');
-
-            const errorBox =
-                formGroup?.querySelector('.error-message');
-
-
-            preview.innerHTML = '';
-
-            if (errorBox) {
-                errorBox.innerText = '';
-            }
-
-            input.classList.remove('error-border');
-
-
-            if (!input.files || !input.files.length) {
-                return;
-            }
-
-
-            const file =
-                input.files[0];
-
-
-            // Type
-            const allowedTypes = [
-                'application/pdf',
+        // Type
+        if (
+            ![
                 'image/png',
                 'image/jpeg'
-            ];
+            ].includes(file.type)
+        ) {
 
-            if (!allowedTypes.includes(file.type)) {
 
-                if (errorBox) {
-                    errorBox.innerText =
-                        'Only PDF, PNG, JPG and JPEG files are allowed';
+            showFieldError(
+                input,
+                'Only PNG, JPG and JPEG images are allowed'
+            );
+
+
+            input.value = '';
+
+            return;
+        }
+
+
+        // Size
+        if (
+            file.size >
+            1024 * 1024
+        ) {
+
+
+            showFieldError(
+                input,
+                'Photo size must not exceed 1 MB'
+            );
+
+
+            input.value = '';
+
+            return;
+        }
+
+
+        // Preview
+        const reader =
+            new FileReader();
+
+
+        reader.onload =
+            function (event) {
+
+                if (image) {
+
+                    image.src =
+                        event.target.result;
+
+                    image.style.display =
+                        'block';
                 }
 
-                input.classList.add('error-border');
-                input.value = '';
-
-                return;
-            }
+            };
 
 
-            // Size
-            if (file.size > 1024 * 1024) {
+        reader.readAsDataURL(file);
 
-                if (errorBox) {
-                    errorBox.innerText =
-                        'Voter ID proof size must not exceed 1 MB';
-                }
-
-                input.classList.add('error-border');
-                input.value = '';
-
-                return;
-            }
+    };
 
 
-            // PDF Preview
-            if (file.type === 'application/pdf') {
+    // =========================================================
+    // ID PROOF PREVIEW
+    // =========================================================
+    window.previewIdProof = function (input) {
 
-                const pdfUrl =
-                    URL.createObjectURL(file);
 
-                preview.innerHTML = `
+        const preview =
+            document.getElementById(
+                'filePreview'
+            );
+
+
+        const formGroup =
+            input.closest('.form-group');
+
+
+        const errorBox =
+            formGroup?.querySelector(
+                '.error-message'
+            );
+
+
+        if (preview) {
+            preview.innerHTML = '';
+        }
+
+
+        if (errorBox) {
+            errorBox.innerText = '';
+        }
+
+
+        input.classList.remove(
+            'error-border'
+        );
+
+
+        if (
+            !input.files ||
+            !input.files.length
+        ) {
+
+            return;
+        }
+
+
+        const file =
+            input.files[0];
+
+
+        const allowedTypes = [
+            'application/pdf',
+            'image/png',
+            'image/jpeg'
+        ];
+
+
+        // Type
+        if (
+            !allowedTypes.includes(
+                file.type
+            )
+        ) {
+
+
+            showFieldError(
+                input,
+                'Only PDF, PNG, JPG and JPEG files are allowed'
+            );
+
+
+            input.value = '';
+
+            return;
+        }
+
+
+        // Size
+        if (
+            file.size >
+            1024 * 1024
+        ) {
+
+
+            showFieldError(
+                input,
+                'Voter ID proof size must not exceed 1 MB'
+            );
+
+
+            input.value = '';
+
+            return;
+        }
+
+
+        if (!preview) {
+            return;
+        }
+
+
+        // PDF
+        if (
+            file.type ===
+            'application/pdf'
+        ) {
+
+
+            const pdfUrl =
+                URL.createObjectURL(file);
+
+
+            preview.innerHTML = `
+
                 <iframe
                     src="${pdfUrl}"
                     width="100%"
                     height="400px"
-                    style="border:1px solid #ddd;">
+                    style="
+                        border:1px solid #ddd;
+                        border-radius:5px;
+                    ">
                 </iframe>
+
             `;
-            }
+
+        }
 
 
-            // Image Preview
-            else {
+        // IMAGE
+        else {
 
-                const imageUrl =
-                    URL.createObjectURL(file);
 
-                preview.innerHTML = `
+            const imageUrl =
+                URL.createObjectURL(file);
+
+
+            preview.innerHTML = `
+
                 <img
                     src="${imageUrl}"
                     alt="Voter ID Preview"
@@ -1086,42 +1490,37 @@
                         object-fit:contain;
                         border:1px solid #ddd;
                         border-radius:5px;
-                    ">
+                    "
+                >
+
             `;
-            }
 
-        };
+        }
+
+    };
 
 
-        // =========================================================
-        // FORM SUBMIT - FINAL JS VALIDATION + AJAX
-        // =========================================================
-        form.addEventListener('submit', function(e) {
+    // =========================================================
+    // FORM SUBMIT
+    // =========================================================
+    form.addEventListener(
+        'submit',
+        function (e) {
 
             e.preventDefault();
 
 
-            // -----------------------------------------------------
-            // Validate Step 4 first
-            // -----------------------------------------------------
-            if (!validateStep(currentStep)) {
-
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation Error',
-                    text: 'Please correct the highlighted fields.'
-                });
-
-                return;
-            }
-
-
-            // -----------------------------------------------------
-            // Validate ALL STEPS before AJAX
-            // -----------------------------------------------------
+            // -------------------------------------------------
+            // VALIDATE ALL STEPS
+            // -------------------------------------------------
             let firstInvalidStep = -1;
 
-            for (let i = 0; i < steps.length; i++) {
+
+            for (
+                let i = 0;
+                i < steps.length;
+                i++
+            ) {
 
                 if (!validateStep(i)) {
 
@@ -1129,78 +1528,137 @@
 
                     break;
                 }
+
             }
 
 
-            // If any previous step has an error
+            // -------------------------------------------------
+            // IF ERROR
+            // -------------------------------------------------
             if (firstInvalidStep !== -1) {
 
-                currentStep = firstInvalidStep;
 
-                showStep(currentStep);
+                currentStep =
+                    firstInvalidStep;
+
+
+                showStep(
+                    currentStep
+                );
+
 
                 Swal.fire({
+
                     icon: 'warning',
+
                     title: 'Validation Error',
-                    text: 'Please correct the highlighted fields.'
+
+                    text:
+                        'Please correct the highlighted fields.'
+
+                });
+
+
+                return;
+            }
+
+
+            // -------------------------------------------------
+            // CREATE FORMDATA
+            // -------------------------------------------------
+            const formData =
+                new FormData(form);
+
+
+            // -------------------------------------------------
+            // CSRF
+            // -------------------------------------------------
+            const csrfInput =
+                document.querySelector(
+                    'input[name="_token"]'
+                );
+
+
+            if (!csrfInput) {
+
+                Swal.fire({
+
+                    icon: 'error',
+
+                    title: 'Security Error',
+
+                    text:
+                        'CSRF token is missing. Please refresh the page.'
+
                 });
 
                 return;
             }
 
 
-            // -----------------------------------------------------
-            // Create FormData
-            // -----------------------------------------------------
-            const formData =
-                new FormData(form);
-
-
-            // -----------------------------------------------------
-            // CSRF
-            // -----------------------------------------------------
             const csrfToken =
-                document.querySelector(
-                    'input[name="_token"]'
-                ).value;
+                csrfInput.value;
 
 
-            // -----------------------------------------------------
-            // Submit button
-            // -----------------------------------------------------
+            // -------------------------------------------------
+            // SUBMIT BUTTON
+            // -------------------------------------------------
             const submitButton =
-                form.querySelector('.submit');
-
-            submitButton.disabled = true;
-
-            submitButton.innerText =
-                'Submitting...';
-
-
-            // -----------------------------------------------------
-            // Clear old errors
-            // -----------------------------------------------------
-            document.querySelectorAll(
-                '.error-message'
-            ).forEach(function(element) {
-
-                element.innerText = '';
-            });
-
-            document.querySelectorAll(
-                '.error-border'
-            ).forEach(function(element) {
-
-                element.classList.remove(
-                    'error-border'
+                form.querySelector(
+                    '.submit'
                 );
-            });
 
 
-            // -----------------------------------------------------
+            let originalButtonText =
+                'Complete Registration';
+
+
+            if (submitButton) {
+
+                originalButtonText =
+                    submitButton.innerText;
+
+                submitButton.disabled =
+                    true;
+
+                submitButton.innerText =
+                    'Submitting...';
+            }
+
+
+            // -------------------------------------------------
+            // CLEAR OLD ERRORS
+            // -------------------------------------------------
+            document
+                .querySelectorAll(
+                    '.error-message'
+                )
+                .forEach(function (element) {
+
+                    element.innerText = '';
+
+                });
+
+
+            document
+                .querySelectorAll(
+                    '.error-border'
+                )
+                .forEach(function (element) {
+
+                    element.classList.remove(
+                        'error-border'
+                    );
+
+                });
+
+
+            // -------------------------------------------------
             // AJAX
-            // -----------------------------------------------------
-            fetch(form.action, {
+            // -------------------------------------------------
+            fetch(
+                form.action,
+                {
 
                     method: 'POST',
 
@@ -1208,29 +1666,54 @@
 
                     headers: {
 
-                        'X-CSRF-TOKEN': csrfToken,
+                        'X-CSRF-TOKEN':
+                            csrfToken,
 
-                        'Accept': 'application/json'
+                        'Accept':
+                            'application/json'
+
                     }
 
-                })
+                }
+            )
 
 
-                // -----------------------------------------------------
-                // RESPONSE
-                // -----------------------------------------------------
-                .then(async function(response) {
-
-                    const data =
-                        await response.json();
+            // -------------------------------------------------
+            // RESPONSE
+            // -------------------------------------------------
+            .then(
+                async function (response) {
 
 
-                    // Laravel validation error
-                    if (response.status === 422) {
+                    let data;
+
+
+                    try {
+
+                        data =
+                            await response.json();
+
+                    } catch (jsonError) {
+
+                        throw new Error(
+                            'Invalid server response.'
+                        );
+
+                    }
+
+
+                    // -----------------------------------------
+                    // LARAVEL VALIDATION ERROR
+                    // -----------------------------------------
+                    if (
+                        response.status === 422
+                    ) {
+
 
                         handleBackendErrors(
-                            data.errors
+                            data.errors || {}
                         );
+
 
                         throw new Error(
                             'VALIDATION_ERROR'
@@ -1238,7 +1721,9 @@
                     }
 
 
-                    // Server error
+                    // -----------------------------------------
+                    // SERVER ERROR
+                    // -----------------------------------------
                     if (!response.ok) {
 
                         throw new Error(
@@ -1250,102 +1735,164 @@
 
                     return data;
 
-                })
+                }
+            )
 
 
-                // -----------------------------------------------------
-                // SUCCESS
-                // -----------------------------------------------------
-                .then(function(data) {
+            // -------------------------------------------------
+            // SUCCESS
+            // -------------------------------------------------
+            .then(
+                function (data) {
+// alert('111');
 
-                    if (data.status === true) {
+                    if (
+                        data.status === true
+                    ) {
+
 
                         Swal.fire({
 
                             icon: 'success',
 
-                            title: 'Registration Successful',
+                            title:
+                                'Registration Successful',
 
-                            text: data.message,
+                            html:
+                                `
+                                <div>
+                                    <p>${data.message}</p>
 
-                            confirmButtonText: 'OK'
+                                    ${
+                                        data.application_id
+                                            ? `
+                                                <p>
+                                                    <strong>
+                                                        Application ID:
+                                                    </strong>
+                                                    <br>
+                                                    ${data.application_id}
+                                                </p>
+                                            `
+                                            : ''
+                                    }
+                                </div>
+                                `,
 
-                        }).then(function() {
+                            confirmButtonText:
+                                'OK'
 
-                            // Reset form
-                            form.reset();
+                        })
+                        .then(
+                            function () {
 
 
-                            // Reset photo preview
-                            const uploadedImage =
-                                document.getElementById(
-                                    'uploadedImage'
+                                // Reset form
+                                form.reset();
+
+
+                                // Reset photo
+                                const uploadedImage =
+                                    document.getElementById(
+                                        'uploadedImage'
+                                    );
+
+
+                                if (
+                                    uploadedImage
+                                ) {
+
+                                    uploadedImage.src =
+                                        '';
+
+                                    uploadedImage.style.display =
+                                        'none';
+                                }
+
+
+                                // Reset ID proof
+                                const filePreview =
+                                    document.getElementById(
+                                        'filePreview'
+                                    );
+
+
+                                if (
+                                    filePreview
+                                ) {
+
+                                    filePreview.innerHTML =
+                                        '';
+                                }
+
+
+                                // Remove errors
+                                document
+                                    .querySelectorAll(
+                                        '.error-border'
+                                    )
+                                    .forEach(
+                                        function (element) {
+
+                                            element.classList.remove(
+                                                'error-border'
+                                            );
+
+                                        }
+                                    );
+
+
+                                document
+                                    .querySelectorAll(
+                                        '.error-message'
+                                    )
+                                    .forEach(
+                                        function (element) {
+
+                                            element.innerText =
+                                                '';
+
+                                        }
+                                    );
+
+
+                                // First step
+                                currentStep =
+                                    0;
+
+
+                                showStep(
+                                    currentStep
                                 );
 
-                            if (uploadedImage) {
-
-                                uploadedImage.src = '';
-
-                                uploadedImage.style.display =
-                                    'none';
                             }
-
-
-                            // Reset ID proof preview
-                            const filePreview =
-                                document.getElementById(
-                                    'filePreview'
-                                );
-
-                            if (filePreview) {
-                                filePreview.innerHTML = '';
-                            }
-
-
-                            // Remove errors
-                            document.querySelectorAll(
-                                '.error-border'
-                            ).forEach(function(element) {
-
-                                element.classList.remove(
-                                    'error-border'
-                                );
-                            });
-
-
-                            document.querySelectorAll(
-                                '.error-message'
-                            ).forEach(function(element) {
-
-                                element.innerText = '';
-                            });
-
-
-                            // First step
-                            currentStep = 0;
-
-                            showStep(currentStep);
-
-                        });
+                        );
 
                     }
 
-                })
+                }
+            )
 
 
-                // -----------------------------------------------------
-                // ERROR
-                // -----------------------------------------------------
-                .catch(function(error) {
+            // -------------------------------------------------
+            // ERROR
+            // -------------------------------------------------
+            .catch(
+                function (error) {
 
-                    console.error(error);
+
+                    console.error(
+                        error
+                    );
 
 
-                    // Don't show second Swal for validation errors
+                    // Do not show second popup
+                    // for Laravel validation
                     if (
                         error.message ===
                         'VALIDATION_ERROR'
                     ) {
+
                         return;
                     }
 
@@ -1354,84 +1901,151 @@
 
                         icon: 'error',
 
-                        title: 'Registration Failed',
+                        title:
+                            'Registration Failed',
 
-                        text: error.message ||
+                        text:
+                            error.message ||
                             'Unable to complete registration.'
 
                     });
 
-                })
+                }
+            )
 
 
-                // -----------------------------------------------------
-                // FINALLY
-                // -----------------------------------------------------
-                .finally(function() {
-
-                    submitButton.disabled = false;
-
-                    submitButton.innerText =
-                        'Complete Registration';
-
-                });
-
-        });
+            // -------------------------------------------------
+            // FINALLY
+            // -------------------------------------------------
+            .finally(
+                function () {
 
 
-        // =========================================================
-        // HANDLE LARAVEL BACKEND ERRORS
-        // =========================================================
-        function handleBackendErrors(errors) {
+                    if (submitButton) {
 
-            let firstErrorField = null;
+                        submitButton.disabled =
+                            false;
 
-            let errorMessages = [];
+                        submitButton.innerText =
+                            originalButtonText;
+                    }
+
+                }
+            );
+
+        }
+    );
 
 
-            // Clear old errors
-            document.querySelectorAll(
+    // =========================================================
+    // HANDLE LARAVEL BACKEND ERRORS
+    // =========================================================
+    function handleBackendErrors(errors) {
+
+
+        let firstErrorField = null;
+
+        let errorMessages = [];
+
+
+        // -----------------------------------------------------
+        // CLEAR OLD ERRORS
+        // -----------------------------------------------------
+        document
+            .querySelectorAll(
                 '.error-message'
-            ).forEach(function(element) {
+            )
+            .forEach(
+                function (element) {
 
-                element.innerText = '';
-            });
+                    element.innerText = '';
 
-            document.querySelectorAll(
+                }
+            );
+
+
+        document
+            .querySelectorAll(
                 '.error-border'
-            ).forEach(function(element) {
+            )
+            .forEach(
+                function (element) {
 
-                element.classList.remove(
-                    'error-border'
-                );
-            });
+                    element.classList.remove(
+                        'error-border'
+                    );
 
-
-            // Process errors
-            Object.keys(errors).forEach(function(key) {
-
-                const message =
-                    errors[key][0];
-
-                errorMessages.push(message);
+                }
+            );
 
 
-                // Radio buttons need special handling
-                const input =
-                    document.querySelector(
-                        `[name="${key}"]`
+        // No errors
+        if (
+            !errors ||
+            Object.keys(errors).length === 0
+        ) {
+
+            return;
+        }
+
+
+        // -----------------------------------------------------
+        // PROCESS ERRORS
+        // -----------------------------------------------------
+        Object.keys(errors)
+            .forEach(
+                function (key) {
+
+
+                    const messages =
+                        errors[key];
+
+
+                    if (
+                        !Array.isArray(messages) ||
+                        messages.length === 0
+                    ) {
+
+                        return;
+                    }
+
+
+                    const message =
+                        messages[0];
+
+
+                    errorMessages.push(
+                        message
                     );
 
 
-                if (input) {
+                    // -----------------------------------------
+                    // Find field by name
+                    // -----------------------------------------
+                    const input =
+                        document.querySelector(
+                            `[name="${key}"]`
+                        );
 
+
+                    if (!input) {
+
+                        return;
+                    }
+
+
+                    // -----------------------------------------
+                    // Add error
+                    // -----------------------------------------
                     input.classList.add(
                         'error-border'
                     );
 
 
                     const formGroup =
-                        input.closest('.form-group');
+                        input.closest(
+                            '.form-group'
+                        );
 
 
                     const errorBox =
@@ -1447,73 +2061,117 @@
                     }
 
 
-                    if (!firstErrorField) {
+                    // -----------------------------------------
+                    // First error field
+                    // -----------------------------------------
+                    if (
+                        !firstErrorField
+                    ) {
 
                         firstErrorField =
                             input;
                     }
+
                 }
-
-            });
-
-
-            // Move to first error step
-            if (firstErrorField) {
-
-                const stepElement =
-                    firstErrorField.closest(
-                        '.form-step'
-                    );
+            );
 
 
-                const stepIndex =
-                    steps.indexOf(stepElement);
+        // -----------------------------------------------------
+        // MOVE TO FIRST ERROR STEP
+        // -----------------------------------------------------
+        if (firstErrorField) {
 
 
-                if (stepIndex !== -1) {
-
-                    currentStep =
-                        stepIndex;
-
-                    showStep(
-                        currentStep
-                    );
-                }
+            const stepElement =
+                firstErrorField.closest(
+                    '.form-step'
+                );
 
 
-                setTimeout(function() {
+            const stepIndex =
+                steps.indexOf(
+                    stepElement
+                );
 
-                    firstErrorField.scrollIntoView({
 
-                        behavior: 'smooth',
+            if (stepIndex !== -1) {
 
-                        block: 'center'
+                currentStep =
+                    stepIndex;
 
-                    });
 
-                }, 300);
+                showStep(
+                    currentStep
+                );
             }
 
 
-            // Backend error popup
+            // Scroll
+            setTimeout(
+                function () {
+
+                    firstErrorField
+                        .scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+
+                },
+                300
+            );
+
+        }
+
+
+        // -----------------------------------------------------
+        // BACKEND ERROR POPUP
+        // -----------------------------------------------------
+        if (
+            errorMessages.length > 0
+        ) {
+
+
             Swal.fire({
 
                 icon: 'error',
 
-                title: 'Validation Error',
+                title:
+                    'Validation Error',
 
-                html: errorMessages.join('<br>')
+                html:
+                    errorMessages
+                        .map(function (message) {
+
+                            return `
+                                <div
+                                    style="
+                                        text-align:left;
+                                        margin-bottom:5px;
+                                    "
+                                >
+                                    • ${message}
+                                </div>
+                            `;
+
+                        })
+                        .join(''),
+
+                confirmButtonText:
+                    'OK'
 
             });
+
         }
 
+    }
 
-        // =========================================================
-        // INITIAL STEP
-        // =========================================================
-        showStep(currentStep);
 
-    });
+    // =========================================================
+    // INITIAL STEP
+    // =========================================================
+    showStep(currentStep);
+
+});
 </script>
 
 <script>

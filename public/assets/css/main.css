@@ -41,3 +41,147 @@
   opacity: 1;
   background: rgba(255, 255, 255, 0.15);
 }
+
+/* aboutus--------------------- */
+
+.about-section,
+.vision-mission-section,
+.objectives-section,
+.leadership-section {
+  padding: 60px 0;
+}
+
+.vision-mission-section {
+  background: #ffffff;
+}
+
+.objectives-section {
+  background: #f5f7fa;
+}
+
+.leadership-section {
+  background: #ffffff;
+}
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  color: #164e63;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.section-heading span {
+  display: block;
+  width: 55px;
+  height: 3px;
+  background: #0f766e;
+  margin: 12px auto 0;
+}
+
+/* =========================================
+   ABOUT CONTENT
+========================================= */
+
+.about-content {
+  padding: 15px 20px 15px 0;
+}
+
+.about-content h3 {
+  margin-top: 0;
+  color: #164e63;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.about-content p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #000;
+  font-weight: 500;
+  margin-bottom: 18px;
+}
+
+.about-image {
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+}
+
+.about-image img {
+  width: 100%;
+  transition: transform 0.3s ease;
+}
+
+.about-image:hover img {
+  transform: scale(1.03);
+}
+
+/* =========================================
+   VISION / MISSION
+========================================= */
+
+.info-card {
+  display: flex;
+  padding: 30px;
+  background: #f8fafc;
+  border: 1px solid #7a7bb8bf;
+  border-radius: 8px;
+  min-height: 190px;
+  transition: all 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.icon-box {
+  min-width: 65px;
+  height: 65px;
+  line-height: 65px;
+  text-align: center;
+  background: #0f766e;
+  color: #ffffff;
+  border-radius: 50%;
+  font-size: 25px;
+  margin-right: 20px;
+}
+
+.info-content h3 {
+  margin-top: 5px;
+  color: #164e63;
+  font-size: 21px;
+  font-weight: 600;
+}
+
+.info-content p {
+  color: #000;
+  font-weight: 500;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.adminlink .adminbtn{
+
+        display: inline-block;
+    position: relative;
+    z-index: 1;
+    border: 0;
+    border-radius: 0;
+    transition: 0.5s all ease;
+    color: #292b75;
+    font-weight: bold;
+    /* border:1px solid #fff; */
+    background-color: #f00041;
+    padding: 5px 15px;
+    border-radius: 5px;
+
+}
+.adminlink a{
+    text-decoration: none!important;
+}

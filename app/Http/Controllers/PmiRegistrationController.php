@@ -22,14 +22,14 @@ class PmiRegistrationController extends Controller
                 'father_name' => 'required|string|max:200',
                 'dob' => 'required|date|before:today',
                 'community'     => 'required|integer|exists:tbl_community,comm_code',
-                'gender' => 'required|in:Male,Female,others',
-                'martialstatus' => 'required|in:Single,Married,others',
+                'gender' => 'required|in:Male,Female,Transgender',
+                'martialstatus' => 'required|in:Un-Married,Married,others',
                 'blood_group'   => 'required|integer|exists:mst_blood,group_code',
                 'mobile_number' => 'required|regex:/^[6-9][0-9]{9}$/',
                 'email' => 'required|email|max:100',
                 'qualification' => 'required|integer|exists:mst_qual,qual_code',
                 'occupation' => 'required|string|max:25',
-                'social_media' => 'required|string|max:100',
+
                 'state' => 'required|string|max:20',
                 'constitution' => 'required|string|max:50',
                 'district' => 'required|string|max:50',
@@ -41,6 +41,8 @@ class PmiRegistrationController extends Controller
                 'photo' => 'required|file|mimes:jpg,jpeg,png|max:1024',
                 'voter_id' => 'required|string|max:20',
                 'id_proof' => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024',
+
+                'referral' => 'nullable|string|max:100',
             ]);
 
             // Calculate age
@@ -62,10 +64,14 @@ class PmiRegistrationController extends Controller
 
             // Generate Application ID
             do {
+
+// dd($request->referral);
                 $applicationId =
-                    'pmi' .
-                    Carbon::now()->format('Ymd') .
+                    'PMI_' . $request->district . $request->constitution .
+                    Carbon::now()->format('Y') .
                     random_int(100, 999);
+
+                    // dd($applicationId); exit;
             } while (
                 pmi_registration::where(
                     'application_id',
@@ -150,7 +156,7 @@ class PmiRegistrationController extends Controller
                 'email' => $request->email,
                 'qualification' => $request->qualification,
                 'occupation' => $request->occupation,
-                'social_media' => $request->social_media,
+
 
                 'state' => $request->state,
                 'constitution' => $request->constitution,
@@ -164,6 +170,7 @@ class PmiRegistrationController extends Controller
                 'photo' => $photoPath,
                 'voter_id' => $request->voter_id,
                 'id_proof' => $idProofPath,
+                'referral' => $request->referral,
 
                 'regi_flag' => '1',
                 'member_registration' => 'PMI',

@@ -68,7 +68,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-5">
+                <div class="col-lg-3">
                     <div class="right">
                         <ul class="social-icon">
                             <li>
@@ -99,6 +99,18 @@
 
 
                         </div>
+
+
+                    </div>
+                </div>
+
+                <div class="col-lg-2 adminlink pt-10">
+                    <div class="left">
+
+
+                           <a class="adminbtn" href="{{route('admin.index')}}"> Admin Portal</a>
+
+
                     </div>
                 </div>
             </div>
@@ -133,19 +145,14 @@
                             </li>
 
                             <li class="nav-item">
-                                <a href="#" class="nav-link">About Party</a>
+                                <a href="{{route('about_us')}}" class="nav-link">About Party</a>
                             </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link dropdown-toggle">Organization </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link dropdown-toggle">Updates </a>
-                            </li>
+
                             <li class="nav-item">
                                 <a href="#" class="nav-link dropdown-toggle">Blog </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link">Contact</a>
+                                <a href="#footer" class="nav-link">Contact</a>
                             </li>
                         </ul>
 

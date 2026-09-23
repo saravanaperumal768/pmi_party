@@ -23,6 +23,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [IndexController::class, 'index'])->name('index');
 
+Route::get('/about_us', [IndexController::class, 'about_us'])->name('about_us');
+
+
+
 Route::get('/member-register', [IndexController::class, 'member_register'])->name('member-register');
 
 // Route::get('/member-register', [PmiRegistrationController::class, 'member_register'])

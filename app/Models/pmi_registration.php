@@ -37,6 +37,7 @@ class pmi_registration extends Model
         'photo',
         'voter_id',
         'id_proof',
+        'referral',
         'regi_flag',
         'member_registration',
         'regi_status',

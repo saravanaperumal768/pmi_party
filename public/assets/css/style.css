@@ -859,7 +859,7 @@ button:focus {
 }
 .ideology-item img {
   width: auto;
-  border-radius: 15px;
+  /* border-radius: 15px; */
 }
 .ideology-item .bottom {
   background-color: #f00041;
@@ -1400,7 +1400,8 @@ button:focus {
 
 /*-- Footer --*/
 .footer-area {
-  background-image: url("../images/footer-bg.jpg");
+  /* background-image: url("../images/footer-bg.jpg"); */
+  background-color: #312d84;
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -1799,7 +1800,7 @@ button:focus {
 /*-- Election --*/
 .election-area {
   text-align: center;
-  background-image: url("../images/election-bg.jpg");
+  background-image: url("../images/election-bg.png");
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -2500,7 +2501,7 @@ button:focus {
 }
 
 .page-title-area {
-  height: 530px;
+  height: 450px;
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;

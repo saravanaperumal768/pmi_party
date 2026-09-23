@@ -50,9 +50,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slider-img">
-                <img src="assets/images/banner/banner-main3.png" alt="Banner" />
-            </div>
+
         </div>
 
         <div class="banner-slider-item">
@@ -81,7 +79,7 @@
 <!-- End Banner -->
 
 <!-- About -->
-<div class="about-area two pt-50 pb-70">
+<div class="about-area two pt-50 ">
 
     <div class="container">
         <div class="row align-items-center justify-content-center">
@@ -116,7 +114,7 @@
 
             <div class="col-lg-4">
                 <div class="about-img">
-                    <img src="assets/images/about_img.jpg" alt="About" />
+                    <img src="assets/images/about_img.png" alt="About" />
                     <!-- <img src="assets/images/about-main2.jpg" alt="About" /> -->
                 </div>
             </div>
@@ -142,7 +140,7 @@
         <div class="row justify-content-center">
             <div class="col-sm-6 col-lg-4">
                 <div class="ideology-item">
-                    <img src="assets/images/leaders/leader1.jpg" alt="Leader" />
+                    <img src="assets/images/leaders/leader1.png" alt="Leader" />
                     <div class="bottom">
                         <h3>State Vice President</h3>
                     </div>

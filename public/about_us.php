@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>About Party</title>
+
+    <link rel="stylesheet" href="about-party.css">
+
+    <!-- Bootstrap 3 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <style>
+    /* =========================================
+   COMMON SECTION
+========================================= */
+
+    .about-section,
+    .vision-mission-section,
+    .objectives-section,
+    .leadership-section {
+        padding: 60px 0;
+    }
+
+    .vision-mission-section {
+        background: #ffffff;
+    }
+
+    .objectives-section {
+        background: #f5f7fa;
+    }
+
+    .leadership-section {
+        background: #ffffff;
+    }
+
+    .section-heading {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .section-heading h2 {
+        margin: 0;
+        color: #164e63;
+        font-size: 28px;
+        font-weight: 700;
+    }
+
+    .section-heading span {
+        display: block;
+        width: 55px;
+        height: 3px;
+        background: #0f766e;
+        margin: 12px auto 0;
+    }
+
+
+    /* =========================================
+   ABOUT CONTENT
+========================================= */
+
+    .about-content {
+        padding: 15px 20px 15px 0;
+    }
+
+    .about-content h3 {
+        margin-top: 0;
+        color: #164e63;
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+    .about-content p {
+        font-size: 15px;
+        line-height: 1.8;
+        color: #555;
+        margin-bottom: 18px;
+    }
+
+    .about-image {
+        overflow: hidden;
+        border-radius: 8px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .about-image img {
+        width: 100%;
+        transition: transform 0.3s ease;
+    }
+
+    .about-image:hover img {
+        transform: scale(1.03);
+    }
+
+
+    /* =========================================
+   VISION / MISSION
+========================================= */
+
+    .info-card {
+        display: flex;
+        padding: 30px;
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        min-height: 190px;
+        transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .icon-box {
+        min-width: 65px;
+        height: 65px;
+        line-height: 65px;
+        text-align: center;
+        background: #0f766e;
+        color: #ffffff;
+        border-radius: 50%;
+        font-size: 25px;
+        margin-right: 20px;
+    }
+
+    .info-content h3 {
+        margin-top: 5px;
+        color: #164e63;
+        font-size: 21px;
+        font-weight: 600;
+    }
+
+    .info-content p {
+        color: #666;
+        line-height: 1.7;
+        font-size: 14px;
+    }
+    </style>
+</head>
+
+<body>
+
+    <div class="about-party-page">
+
+        <!-- About Party -->
+        <section class="about-section">
+            <div class="container">
+
+                <div class="section-heading">
+                    <h2>About the Party</h2>
+                    <span></span>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-7">
+                        <div class="about-content">
+
+                            <h3>Our Commitment</h3>
+
+                            <p>
+                                Our party is committed to serving the people and
+                                working towards inclusive, transparent and
+                                sustainable development.
+                            </p>
+
+                            <p>
+                                We believe that effective public participation,
+                                responsible governance and equal opportunities
+                                are essential for building a stronger society.
+                            </p>
+
+                            <p>
+                                Our focus is on addressing the needs of citizens,
+                                supporting development initiatives and creating
+                                opportunities for future generations.
+                            </p>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-5">
+                        <div class="about-image">
+                            <img src="https://tamilagapodhumakkaliyakkam.com/assets/images/banner/banner-bg2.jpg"
+                                alt="About Party" class="img-responsive">
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- Vision & Mission -->
+        <section class="vision-mission-section">
+
+            <div class="container">
+
+                <div class="section-heading">
+                    <h2>Vision & Mission</h2>
+                    <span></span>
+                </div>
+
+                <div class="row">
+
+                    <!-- Vision -->
+                    <div class="col-md-6">
+                        <div class="info-card">
+
+                            <div class="icon-box">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </div>
+
+                            <div class="info-content">
+                                <h3>Our Vision</h3>
+
+                                <p>
+                                    To build a progressive, inclusive and
+                                    prosperous society where every citizen has
+                                    equal opportunities and access to development.
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <!-- Mission -->
+                    <div class="col-md-6">
+                        <div class="info-card">
+
+                            <div class="icon-box">
+                                <span class="glyphicon glyphicon-flag"></span>
+                            </div>
+
+                            <div class="info-content">
+                                <h3>Our Mission</h3>
+
+                                <p>
+                                    To work with people and communities to promote
+                                    responsible governance, social development,
+                                    transparency and sustainable growth.
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+</body>
+
+</html>

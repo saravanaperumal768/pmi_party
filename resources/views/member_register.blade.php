@@ -120,12 +120,12 @@
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-12">Marital Status</label>
+                                    <label class="col-md-12">Marital Status</label>
 
                                     <div class="col-md-5">
                                         <label class="d-flex align-items-center">
                                             <input type="radio" name="martialstatus" value="Un-Married" required>
-                                            <span class="ms-2">Un-Married</span>
+                                            <span class="ms-2">Un&nbsp;Married</span>
                                         </label>
                                     </div>
 
@@ -174,7 +174,7 @@
 
 
                                 <div class="form-group">
-                                    <label for="phone">Phone Number</label>
+                                    <label for="phone">Mobile Number</label>
                                     <input type="tel" id="mobile_number" name="mobile_number" required>
                                     <div class="error-message"> </div>
                                 </div>
@@ -207,12 +207,6 @@
                                     <div class="error-message"> </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="socialmedia">Any Social Media ID (Instagram / Facebook /
-                                        Twitter)</label>
-                                    <input type="text" id="social_media" name="social_media" required>
-                                    <div class="error-message"> </div>
-                                </div>
 
                                 <div class="buttons">
                                     <button type="button" class="prev">Back</button>
@@ -233,7 +227,7 @@
                                     <select id="state" name="state" required>
                                         <option value="">Select State</option>
 
-                                        <option value="tamil_nadu">Tamil Nadu</option>
+                                        <option value="tamil_nadu" selected>Tamil Nadu</option>
                                     </select>
 
                                     <div class="error-message"></div>
@@ -300,7 +294,7 @@
 
                                 <!-- Part Number -->
                                 <div class="form-group">
-                                    <label for="part">Part Number</label>
+                                    <label for="part">Part Number (Refer Voter ID)</label>
 
                                     <input
                                         type="text"
@@ -312,18 +306,6 @@
                                 </div>
 
 
-                                <!-- Other Details -->
-                                <div class="form-group" id="otherBox">
-                                    <label>Enter Details</label>
-
-                                    <input
-                                        type="text"
-                                        name="other_details"
-                                        placeholder="Enter your State / District / Assembly">
-
-                                    <div class="error-message"></div>
-                                </div>
-
 
                                 <!-- Full Address -->
                                 <div class="form-group">
@@ -333,7 +315,7 @@
                                         rows="3"
                                         id="address"
                                         name="address"
-                                        required></textarea>
+                                        required placeholder="Full Address with Pincode"></textarea>
 
                                     <div class="error-message"></div>
                                 </div>
@@ -348,9 +330,49 @@
                             <!-- Step 3: Additional Information -->
                             <div class="form-step">
 
-                                <div class="form-header">
+                              <div class="form-header">
                                     <h1>ID Proof</h1>
                                 </div>
+
+                                 <!-- VOTER ID -->
+                                <div class="form-group">
+
+                                    <label for="voter_id">
+                                        Referral ID / Reference Number
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="referral"
+                                        id="referral"
+                                        placeholder="Referral ID / Reference Number">
+
+                                    <div class="error-message"></div>
+
+                                </div>
+
+                                 <!-- VOTER ID -->
+                               <div class="form-group">
+                                    <label for="voter_id">
+                                        Voter ID <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="voter_id"
+                                        name="voter_id"
+                                        class="form-control"
+                                        maxlength="10"
+                                        placeholder="ABC1234567"
+                                        autocomplete="off"
+                                    >
+
+                                    <div class="error-message"></div>
+                                </div>
+
+
+
+
 
                                 <!-- PHOTO -->
                                 <div class="form-group">
@@ -387,22 +409,7 @@
                                 </div>
 
 
-                                <!-- VOTER ID -->
-                                <div class="form-group">
 
-                                    <label for="voter_id">
-                                        Voter ID Number
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        name="voter_id"
-                                        id="voter_id"
-                                        placeholder="Enter your Voter ID Number">
-
-                                    <div class="error-message"></div>
-
-                                </div>
 
 
                                 <!-- VOTER ID PROOF -->
@@ -430,6 +437,9 @@
                                         style="margin-top:10px;"></div>
 
                                 </div>
+
+
+
 
 
                                 <div class="buttons">
