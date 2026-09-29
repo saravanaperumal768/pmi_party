@@ -11,68 +11,55 @@
                     <p class="text-muted mb-0">Review Registration details, roles and status</p>
                 </div>
             </div>
-            <div class="heading-actions">
-                <a class="btn btn-outline-secondary btn-sm" href="#"><i class="bi bi-download" aria-hidden="true"></i> Export</a>
-                <!-- <a class="btn btn-primary btn-sm" href="#"><i class="bi bi-person-plus" aria-hidden="true"></i> Add User</a> -->
-            </div>
+
         </div>
 
         <section class="row g-3 mt-1" aria-label="User summary">
-            <div class="col-12 col-sm-6 col-xl-3">
+            <div class="col-12 col-sm-6 col-xl-4">
                 <article class="metric-card metric-primary">
                     <div class="metric-top">
                         <span class="metric-label">Total registrations</span>
                         <span class="metric-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
                     </div>
                     <div class="metric-value">{{$registrationCount}}</div>
-                    <div class="metric-meta">
-                        <!-- <span class="text-success">+5.1%</span> -->
+                    <!-- <div class="metric-meta">
+                        <span class="text-success">+5.1%</span>
                         <span>this month</span>
-                    </div>
+                    </div> -->
                 </article>
             </div>
 
-            <div class="col-12 col-sm-6 col-xl-3">
-                <article class="metric-card metric-success">
-                    <div class="metric-top">
-                        <span class="metric-label">Active</span>
-                        <span class="metric-icon"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
-                    </div>
-                    <div class="metric-value">0</div>
-                    <div class="metric-meta">
-                        <!-- <span class="text-success">91%</span> -->
+            <div class="col-12 col-sm-6 col-xl-4">
+                <a href="{{route('admin.approvedmembers')}}">
+                    <article class="metric-card metric-success">
+                        <div class="metric-top">
+                            <span class="metric-label">Approval</span>
+                            <span class="metric-icon"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
+                        </div>
+                        <div class="metric-value">{{$approvalCount}}</div>
+                        <!-- <div class="metric-meta">
+                        <span class="text-success">91%</span>
                         <span>healthy accounts</span>
-                    </div>
-                </article>
+                    </div> -->
+                    </article>
+                </a>
             </div>
 
-            <div class="col-12 col-sm-6 col-xl-3">
+            <div class="col-12 col-sm-6 col-xl-4">
                 <article class="metric-card metric-warning">
                     <div class="metric-top">
                         <span class="metric-label">Pending</span>
                         <span class="metric-icon"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span>
                     </div>
-                    <div class="metric-value">0</div>
-                    <div class="metric-meta">
-                        <!-- <span class="text-warning">12</span> -->
+                    <div class="metric-value">{{$pendingCount}}</div>
+                    <!-- <div class="metric-meta">
+                        <span class="text-warning">12</span>
                         <span>need approval</span>
-                    </div>
+                    </div> -->
                 </article>
             </div>
 
-            <div class="col-12 col-sm-6 col-xl-3">
-                <article class="metric-card metric-danger">
-                    <div class="metric-top">
-                        <span class="metric-label">Suspended</span>
-                        <span class="metric-icon"><i class="bi bi-slash-circle" aria-hidden="true"></i></span>
-                    </div>
-                    <div class="metric-value">0</div>
-                    <div class="metric-meta">
-                        <!-- <span class="text-danger">4</span> -->
-                        <span>flagged today</span>
-                    </div>
-                </article>
-            </div>
+
         </section>
 
         <section class="panel mt-3">
@@ -82,7 +69,7 @@
                     <div class="col-md-9">
                         <h2 class="h5 mb-1 section-title">
                             <i class="bi bi-table"></i>
-                            <span>Registered Details</span>
+                            <span>Pending Registered Details</span>
                         </h2>
                     </div>
 
@@ -109,14 +96,15 @@
 
                     <thead>
                         <tr>
+                            <th>District</th>
+                            <th>Taluk</th>
                             <th scope="col"> Name</th>
-                            <th scope="col">DOB</th>
-                            <th scope="col">Gender</th>
+
                             <th scope="col">Mobile</th>
                             <!-- <th scope="col">Address</th> -->
                             <th scope="col">Voter Id</th>
 
-                            <th scope="col" class="text-end">Action</th>
+                            <th class="text-center">Action</th>
                         </tr>
                     </thead>
 
@@ -125,6 +113,8 @@
                         @forelse($registration as $registration)
 
                         <tr>
+                            <td>{{ $registration->districtname_eng ?? '-' }}</td>
+                            <td>{{ $registration->taluk_name_eng ?? '-' }}</td>
 
                             <td>
                                 <div class="d-flex align-items-center gap-2">
@@ -145,13 +135,7 @@
                             </td>
 
 
-                            <td>
-                                {{ $registration->dob ?? '-' }}
-                            </td>
 
-                            <td>
-                                {{ $registration->gender ?? '-' }}
-                            </td>
 
                             <td>
                                 {{ $registration->mobile_number ?? '-' }}
@@ -167,12 +151,22 @@
 
 
 
-                            <td class="text-end">
-                                <a
-                                    href="{{ route('admin.registration_details', ['memberid' => $registration->application_id]) }}"
-                                    class="btn btn-light btn-sm">
-                                    View
-                                </a>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+
+                                    <a href="{{ route('admin.registration_details', ['memberid' => $registration->application_id]) }}"
+                                        class="btn btn-primary btn-sm">
+                                        <i class="fa fa-eye"></i> View
+                                    </a>
+
+                                    <a href="javascript:void(0);"
+                                        id="approvemember"
+                                        data-application-id="{{ $registration->application_id }}"
+                                        class="btn btn-success btn-sm">
+                                        <i class="fa fa-check"></i> Approve
+                                    </a>
+
+                                </div>
                             </td>
 
                         </tr>

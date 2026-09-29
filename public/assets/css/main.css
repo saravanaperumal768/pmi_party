@@ -177,11 +177,21 @@
     color: #292b75;
     font-weight: bold;
     /* border:1px solid #fff; */
-    background-color: #f00041;
+    border-color: #f00041;
     padding: 5px 15px;
     border-radius: 5px;
 
 }
 .adminlink a{
     text-decoration: none!important;
+}
+
+.header-area .adminlink .left   a{
+text-decoration: none!important;
+/* border-bottom: none!important; */
+border:1px solid #fff;
+}
+
+.text-right{
+    text-align: right;
 }

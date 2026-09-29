@@ -11,7 +11,7 @@
 
                 </div>
             </div>
-            <div class="heading-actions"><a class="btn btn-outline-secondary btn-sm" href="{{route('admin.dashboard') }}"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Users</a><a class="btn btn-primary btn-sm" href="add-user.html"><i class="bi bi-person-plus" aria-hidden="true"></i> Add User</a></div>
+            <div class="heading-actions"><a class="btn btn-outline-secondary btn-sm" href="{{route('admin.dashboard') }}"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Users</a></div>
         </div>
 
         <section class="row g-3">
@@ -68,8 +68,32 @@
 
                         <div>
                             <span>Date of Birth</span>
-                            <strong>{{ $registration->dob ?? '-' }}</strong>
+                            <strong>{{ !empty($registration->dob)
+                    ? \Carbon\Carbon::parse($registration->dob)->format('d-m-Y ')
+                    : '-' }}</strong>
                         </div>
+
+                        @if($registration->regi_flag != '1')
+
+                        <div class="row">
+
+
+                            <a href="javascript:void(0);"
+                                id="approvemember"
+                                data-application-id="{{ $registration->application_id }}"
+                                class="btn btn-success btn-sm">
+                                <i class="fa fa-check"></i> Approve
+                            </a>
+
+
+                            <a href="#"
+                                class="btn btn-danger btn-sm">
+                                <i class="fa fa-close"></i> Reject
+                            </a>
+
+
+                        </div>
+                        @endif
 
                     </div>
 
@@ -98,101 +122,111 @@
 
                     <div class="table-responsive">
 
-                        <table class="table table-bordered table-hover align-middle mb-0">
 
+
+                        <table class="table table-bordered">
                             <tbody>
 
-                                @foreach((array) $registration as $field => $value)
+                                <tr>
+                                    <th style="width: 20%;">Application ID</th>
+                                    <td>{{ $registration->application_id ?? '-' }}</td>
 
-                                {{-- Do not display these fields --}}
-                                @if(in_array($field, ['id', 'other_details', 'regi_status', 'regi_flag', 'member_registration', 'referral', 'updated_at']))
-                                @continue
-                                @endif
+                                    <th style="width: 20%;">Name</th>
+                                    <td>{{ $registration->name ?? '-' }}</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Mobile Number</th>
+                                    <td>{{ $registration->mobile_number ?? '-' }}</td>
+
+                                    <th>Email</th>
+                                    <td>{{ $registration->email ?? '-' }}</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Community</th>
+                                    <td>{{ $community ?? '-' }}</td>
+
+                                    <th>Qualification</th>
+                                    <td>{{ $qual ?? '-' }}</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Constitution</th>
+                                    <td>{{ $constitution ?? '-' }}</td>
+
+                                    <th>District</th>
+                                    <td>{{ $district ?? '-' }}</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Taluk</th>
+                                    <td>{{ $taluk ?? '-' }}</td>
+
+                                    <th>Block</th>
+                                    <td>{{ $block ?? '-' }}</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Address</th>
+                                    <td colspan="3">{{ $registration->address ?? '-' }}</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Applied On</th>
+                                    <td colspan="3">
+                                        {{ !empty($registration->created_at)
+                    ? \Carbon\Carbon::parse($registration->created_at)->format('d-m-Y ')
+                    : '-' }}
+                                    </td>
+                                </tr>
 
                                 <tr>
 
-                                    <th
-                                        class="text-capitalize"
-                                        style="width:35%;">
-
-                                        @if($field === 'created_at')
-                                        Applied On
-                                        @else
-                                        {{ str_replace('_', ' ', $field) }}
-                                        @endif
-
-                                    </th>
-
+                                    <th>Photo</th>
                                     <td>
-
-                                        @if($field === 'community')
-
-                                        {{ $community ?? '-' }}
-
-                                        @elseif($field === 'qualification')
-
-                                        {{ $qual ?? '-' }}
-
-                                        @elseif($field === 'constitution')
-
-                                        {{ $constitution ?? '-' }}
-
-                                        @elseif($field === 'district')
-
-                                        {{ $district ?? '-' }}
-
-                                        @elseif($field === 'taluk')
-
-                                        {{ $taluk ?? '-' }}
-
-                                        @elseif($field === 'block')
-
-                                        {{ $block ?? '-' }}
-
-                                        @elseif($field === 'created_at')
-
-
-                                        {{ $value
-                                            ? \Carbon\Carbon::parse($value)->format('d-m-Y H:i:s')
-                                            : '-' }}
-
-
-                                        @elseif($field === 'id_proof' && !empty($value))
-
-                                        <a
-                                            href="{{ asset($value) }}"
-                                            target="_blank"
-                                            class="btn btn-sm btn-primary">
-                                            <i class="bi bi-eye"></i> View ID Proof
-                                        </a>
-
-                                        @elseif($field === 'photo' && !empty($value))
-
-                                        <img
-                                            src="{{ asset($value) }}"
+                                        @if(!empty($registration->photo))
+                                        <img src="{{ asset($registration->photo) }}"
                                             alt="Photo"
-                                            style="width:100px;height:100px;object-fit:cover;border-radius:8px;">
-
-                                        @elseif($field === 'created_at' || $field === 'updated_at')
-
-                                                    {{ $value
-                                    ? \Carbon\Carbon::parse($value)->format('d-m-Y')
-                                    : '-' }}
-
+                                            style="width:70px;height:70px;object-fit:cover;border-radius:8px;">
                                         @else
-
-                                        {{ $value ?? '-' }}
-
+                                        -
                                         @endif
-
                                     </td>
+                                </tr>
+
+                                <tr>
 
                                 </tr>
 
-                                @endforeach
+                                <tr>
+                                    <th>Voter ID</th>
+                                    <td>{{ $registration->voter_id ?? '-' }}</td>
+
+                                    <th>Voter ID Proof</th>
+                                    <td> <a href="{{ asset($registration->id_proof) }}"
+                                            target="_blank"
+                                            class="btn btn-sm btn-primary">
+                                            <i class="bi bi-eye"></i> View ID Proof
+                                        </a></td>
+                                </tr>
+
+
+                                <tr>
+                                    <th>Aadhaar ID</th>
+                                    <td>{{ $registration->aadhaar_id ?? '-' }}</td>
+
+                                    <th>Aadhaar ID Proof</th>
+                                    <td> <a href="{{ asset($registration->aadhaar_proof) }}"
+                                            target="_blank"
+                                            class="btn btn-sm btn-primary">
+                                            <i class="bi bi-eye"></i> View Aadhaar ID Proof
+                                        </a></td>
+                                </tr>
+
+
 
                             </tbody>
-
                         </table>
 
                     </div>

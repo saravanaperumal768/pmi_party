@@ -208,7 +208,7 @@ button:focus {
   display: inline-block;
   color: #fff;
   font-size: 14px;
-  border-bottom: 1px solid transparent;
+  /* border-bottom: 1px solid transparent; */
 }
 .header-area .left a i {
   display: inline-block;
@@ -217,7 +217,7 @@ button:focus {
   top: 3px;
 }
 .header-area .left a:hover {
-  border-bottom: 1px solid #fff;
+
 }
 .header-area .right {
   text-align: right;

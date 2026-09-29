@@ -11,6 +11,11 @@ class pmi_registration extends Model
 
     protected $table = 'pmi_registration';
 
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
     protected $fillable = [
         'application_id',
         'name',
@@ -39,7 +44,9 @@ class pmi_registration extends Model
         'id_proof',
         'referral',
         'regi_flag',
-        'member_registration',
+        'memberid',
         'regi_status',
+        'aadhaar_id',
+        'aadhaar_proof'
     ];
 }

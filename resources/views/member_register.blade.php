@@ -74,9 +74,9 @@
                                 <input type="hidden" name="age" id="age">
 
 
-                                <div class="form-group">
+                                <div class="form-group" style="display: none;">
                                     <label for="community">Community</label>
-                                    <select id="community" name="community">
+                                    <!-- <select id="community" name="community">
                                         <option value="" selected disabled>
                                             Select Community
                                         </option>
@@ -85,7 +85,9 @@
                                             {{ $row->comm_desc }}
                                         </option>
                                         @endforeach
-                                    </select>
+                                    </select> -->
+
+                                    <input type="hidden" name="community" value="1">
 
                                     <div class="error-message"></div>
                                 </div>
@@ -227,7 +229,7 @@
                                     <select id="state" name="state" required>
                                         <option value="">Select State</option>
 
-                                        <option value="tamil_nadu" selected>Tamil Nadu</option>
+                                        <option value="1" selected>Tamil Nadu</option>
                                     </select>
 
                                     <div class="error-message"></div>
@@ -330,11 +332,11 @@
                             <!-- Step 3: Additional Information -->
                             <div class="form-step">
 
-                              <div class="form-header">
+                                <div class="form-header">
                                     <h1>ID Proof</h1>
                                 </div>
 
-                                 <!-- VOTER ID -->
+                                <!-- VOTER ID -->
                                 <div class="form-group">
 
                                     <label for="voter_id">
@@ -350,29 +352,6 @@
                                     <div class="error-message"></div>
 
                                 </div>
-
-                                 <!-- VOTER ID -->
-                               <div class="form-group">
-                                    <label for="voter_id">
-                                        Voter ID <span class="text-danger">*</span>
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        id="voter_id"
-                                        name="voter_id"
-                                        class="form-control"
-                                        maxlength="10"
-                                        placeholder="ABC1234567"
-                                        autocomplete="off"
-                                    >
-
-                                    <div class="error-message"></div>
-                                </div>
-
-
-
-
 
                                 <!-- PHOTO -->
                                 <div class="form-group">
@@ -409,6 +388,24 @@
                                 </div>
 
 
+                                <!-- VOTER ID -->
+                                <div class="form-group">
+                                    <label for="voter_id">
+                                        Voter ID <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="voter_id"
+                                        name="voter_id"
+                                        class="form-control"
+                                        maxlength="10"
+                                        placeholder="ABC1234567"
+                                        autocomplete="off">
+
+                                    <div class="error-message"></div>
+                                </div>
+
 
 
 
@@ -435,6 +432,54 @@
                                     <div
                                         id="filePreview"
                                         style="margin-top:10px;"></div>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="aadhaar_id">
+                                        Aadhaar Number <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="aadhaar_id"
+                                        name="aadhaar_id"
+                                        class="form-control"
+                                        maxlength="12"
+                                        placeholder="1234 5678 9012"
+
+                                        autocomplete="off">
+
+                                    <div class="error-message"></div>
+
+                                </div>
+
+
+
+
+                                <!-- VOTER ID PROOF -->
+                                <div class="form-group">
+
+                                    <label for="aadhaar_proof">
+                                        Upload Aadhaar Proof
+                                    </label>
+
+                                    <input
+                                        type="file"
+                                        name="aadhaar_proof"
+                                        id="aadhaar_proof"
+                                        accept=".pdf,.png,.jpg,.jpeg"
+                                        onchange="previewaadhaarIdProof(this)">
+
+                                    <span class="file-limit">
+                                        PDF/PNG/JPG Size only (Max 1 MB)
+                                    </span>
+
+                                    <div class="error-message"></div>
+
+                                    <div id="aadhaarFilePreview" style="margin-top:10px;"></div>
 
                                 </div>
 
@@ -479,34 +524,34 @@
 
 @include('include.footer')
 <script>
-$(document).ready(function() {
-    $('#district').on('change', function() {
-        var districtId = $(this).val();
-// 		alert(districtId);
+    $(document).ready(function() {
+        $('#district').on('change', function() {
+            var districtId = $(this).val();
+            // 		alert(districtId);
 
-        $('#constitution').html('<option value="">Select Assembly Constitution</option>');
-        $('#taluk').html('<option value="">Select Taluk</option>');
-        $('#block').html('<option value="">Select Block</option>');
+            $('#constitution').html('<option value="">Select Assembly Constitution</option>');
+            $('#taluk').html('<option value="">Select Taluk</option>');
+            $('#block').html('<option value="">Select Block</option>');
 
-        if (districtId) {
-            $.get('/get-const/' + districtId, function(data) {
-                $.each(data, function(key, row) {
-                    $('#constitution').append('<option value="'+row.id+'">'+row.acname_eng+'</option>');
+            if (districtId) {
+                $.get('/get-const/' + districtId, function(data) {
+                    $.each(data, function(key, row) {
+                        $('#constitution').append('<option value="' + row.id + '">' + row.acname_eng + '</option>');
+                    });
                 });
-            });
 
-            $.get('/get-taluk/' + districtId, function(data) {
-                $.each(data, function(key, row) {
-                    $('#taluk').append('<option value="'+row.id+'">'+row.taluk_name_eng+'</option>');
+                $.get('/get-taluk/' + districtId, function(data) {
+                    $.each(data, function(key, row) {
+                        $('#taluk').append('<option value="' + row.id + '">' + row.taluk_name_eng + '</option>');
+                    });
                 });
-            });
 
-            $.get('/get-block/' + districtId, function(data) {
-                $.each(data, function(key, row) {
-                    $('#block').append('<option value="'+row.id+'">'+row.block_name_eng+'</option>');
+                $.get('/get-block/' + districtId, function(data) {
+                    $.each(data, function(key, row) {
+                        $('#block').append('<option value="' + row.id + '">' + row.block_name_eng + '</option>');
+                    });
                 });
-            });
-        }
+            }
+        });
     });
-});
 </script>

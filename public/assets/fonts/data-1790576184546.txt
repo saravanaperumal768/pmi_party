@@ -1,0 +1,4 @@
+"id","login_id","application_id","staff_category","staff_cc_no","staff_cc_validity_from","staff_cc_validity_to","appointment_letter","consent_letter","staff_flag","created_at","updated_at","staff_cc_first_issue","app_doc","cons_doc","row_index","staff_status","staff_designation"
+"40","tnelb_1121","DAEA26000005","QC","CC20260700003","2024-07-10","2026-07-09",NULL,NULL,NULL,"2026-09-11 13:13:56","2026-09-11 13:13:56","2024-07-01","1","1",1,"N",NULL
+"152","tnelb_1121","DAEA26000005","QC","CC20260700002","2024-07-10","2026-07-09",NULL,NULL,"1","2026-09-20 12:26:04","2026-09-25 11:06:29","2024-07-01","uploads/prod/EA/New_applications/QAD/20260925_1105_tnelb_1121_L8_QAD2.pdf",NULL,2,"N",NULL
+"293","tnelb_1121","DAEA26000005","QC","CC20260700002","2024-07-10","2026-07-09",NULL,NULL,"1","2026-09-25 11:06:29","2026-09-25 11:06:29","2024-07-01",NULL,"uploads/prod/EA/New_applications/QCD/20260925_1106_tnelb_1121_L8_QCD2.pdf",2,"N",NULL

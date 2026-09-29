@@ -10,9 +10,9 @@
     <meta name="description" content="">
     <title>PMI Admin</title>
 
-<link rel="stylesheet" href="{{ asset('adminfiles/assets/css/bootstrap.min.css') }}">
-<link rel="stylesheet" href="{{ asset('adminfiles/assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
-<link rel="stylesheet" href="{{ asset('adminfiles/assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('adminfiles/assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('adminfiles/assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
+    <link rel="stylesheet" href="{{ asset('adminfiles/assets/css/style.css') }}">
 </head>
 
 <body class="auth-body">
@@ -26,12 +26,12 @@
             <form class="needs-validation" id="adminLoginForm" novalidate>
 
                 <div class="mb-4">
-                    <h1 class="h3 mb-1">Login</h1>
+                    <h1 class="h3 mb-1 text-center">Admin Login</h1>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="loginEmail">
-                        Enter Member ID
+                        Enter Admin ID
                     </label>
 
                     <input
@@ -67,6 +67,38 @@
 
                 </div>
 
+                <div class="mb-3">
+                    <label class="form-label" for="captcha">
+                        Enter CAPTCHA
+                    </label>
+
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <div class="captcha-box" id="adminCaptcha">
+                            {{ session('admin_login_captcha') }}
+                        </div>
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-secondary"
+                            id="refreshAdminCaptcha"
+                            title="Refresh CAPTCHA">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
+                    </div>
+
+                    <input
+                        class="form-control"
+                        id="captcha"
+                        name="captcha"
+                        type="text"
+                        autocomplete="off"
+                        required>
+
+                    <div class="invalid-feedback">
+                        Enter the CAPTCHA.
+                    </div>
+                </div>
+
                 <button
                     class="btn btn-primary w-100"
                     type="submit"
@@ -83,12 +115,17 @@
         </section>
     </main>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="{{ asset('adminfiles/assets/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('adminfiles/assets/js/main.js') }}"></script>
+    <script src="{{ asset('adminfiles/assets/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('adminfiles/assets/js/main.js') }}"></script>
 
     <script>
         $(document).ready(function() {
 
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
             $('#adminLoginForm').on('submit', function(e) {
 
@@ -97,16 +134,14 @@
                 let form = this;
 
                 if (!form.checkValidity()) {
-
                     e.stopPropagation();
-
                     $(form).addClass('was-validated');
-
                     return;
                 }
 
                 let memberid = $('#loginEmail').val().trim();
                 let password = $('#loginPassword').val();
+                let captcha = $('#captcha').val().trim();
 
                 let loginBtn = $('#loginBtn');
                 let messageBox = $('#loginMessage');
@@ -126,9 +161,9 @@
                     type: "POST",
 
                     data: {
-                        _token: "{{ csrf_token() }}",
                         memberid: memberid,
-                        loginPassword: password
+                        loginPassword: password,
+                        captcha: captcha
                     },
 
                     success: function(response) {
@@ -157,6 +192,8 @@
 
                     error: function(xhr) {
 
+                        console.log(xhr.responseJSON);
+
                         let message = 'Something went wrong. Please try again.';
 
                         if (xhr.responseJSON && xhr.responseJSON.message) {
@@ -170,8 +207,11 @@
                         );
 
                         resetLoginButton();
-                    }
 
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000)
+                    }
                 });
 
                 function resetLoginButton() {
@@ -185,6 +225,35 @@
 
             });
 
+        });
+
+
+        $(document).on('click', '#refreshAdminCaptcha', function() {
+
+            // alert('111');
+
+            $.ajax({
+                url: "{{ route('admin.refresh.captcha', 'admin') }}",
+                type: "GET",
+
+                success: function(response) {
+
+                    if (response.status) {
+                        $('#adminCaptcha').text(response.captcha);
+                        $('#captcha').val('');
+                    }
+
+                },
+
+                error: function() {
+                    alert('Unable to refresh CAPTCHA.');
+                }
+            });
+
+        });
+
+        $(document).on('input', '#captcha', function() {
+            this.value = this.value.toUpperCase();
         });
     </script>
 </body>

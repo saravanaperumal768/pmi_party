@@ -15,6 +15,8 @@ class PmiRegistrationController extends Controller
     {
         DB::beginTransaction();
 
+        // dd($request->all()); exit;
+
         try {
 
             $validated = $request->validate([
@@ -41,6 +43,15 @@ class PmiRegistrationController extends Controller
                 'photo' => 'required|file|mimes:jpg,jpeg,png|max:1024',
                 'voter_id' => 'required|string|max:20',
                 'id_proof' => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024',
+
+             'aadhaar_id' => [
+                    'required',
+                    'string',
+                    'regex:/^[0-9]{12}$/',
+                    'unique:pmi_registration,aadhaar_id',
+                ],
+
+                'aadhaar_proof' => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024',
 
                 'referral' => 'nullable|string|max:100',
             ]);
@@ -139,6 +150,35 @@ class PmiRegistrationController extends Controller
                     $idProofName;
             }
 
+            $aadhaaridProofPath = null;
+
+            if ($request->hasFile('aadhaar_proof')) {
+
+                $aadhaaridDirectory = public_path(
+                    'uploads/pmi_registration/aadhaar'
+                );
+
+                if (!file_exists($aadhaaridDirectory)) {
+                    mkdir($aadhaaridDirectory, 0755, true);
+                }
+
+                $aadhaaridProof = $request->file('aadhaar_proof');
+
+                $aadhaaridProofName =
+                    time() . '_' .
+                    uniqid() . '.' .
+                    $aadhaaridProof->getClientOriginalExtension();
+
+                $aadhaaridProof->move(
+                    $aadhaaridDirectory,
+                    $aadhaaridProofName
+                );
+
+                $aadhaaridProofPath =
+                    'uploads/pmi_registration/aadhaar/' .
+                    $aadhaaridProofName;
+            }
+
             // Save Registration
             $registration = pmi_registration::create([
 
@@ -172,9 +212,12 @@ class PmiRegistrationController extends Controller
                 'id_proof' => $idProofPath,
                 'referral' => $request->referral,
 
-                'regi_flag' => '1',
-                'member_registration' => 'PMI',
-                'regi_status' => 'Active',
+                'aadhaar_proof' => $aadhaaridProofPath,
+                'aadhaar_id' => $request->aadhaar_id,
+
+                'regi_flag' => '0',
+                'memberid' => '0',
+                'regi_status' => 'Pending',
             ]);
 
             DB::commit();

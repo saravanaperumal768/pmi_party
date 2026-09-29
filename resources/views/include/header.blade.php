@@ -46,6 +46,9 @@
     <!-- Theme Dark CSS -->
     <link href="{{ asset('assets/css/theme-dark.css') }}" rel="stylesheet">
 
+    <link href="{{ asset('assets/css/font-awesome.min.css') }}" rel="stylesheet">
+
+
     <!-- Title -->
     <title>Tamilaga Podhu Makkal Iyakkam</title>
 
@@ -58,7 +61,7 @@
     <div class="header-area two">
         <div class="container">
             <div class="row align-items-center justify-content-center">
-                <div class="col-lg-7">
+                <div class="col-lg-4">
                     <div class="left">
                         <span>Watch:</span>
                         <a href="#">
@@ -104,15 +107,27 @@
                     </div>
                 </div>
 
-                <div class="col-lg-2 adminlink pt-10">
+                 <div class="col-lg-2 adminlink pt-10 text-right">
                     <div class="left">
 
 
-                           <a class="adminbtn" href="{{route('admin.index')}}"> Admin Portal</a>
+                           <a class="adminbtn" href="{{route('admin.member_login')}}"><i class="fa fa-user-circle-o"></i>&nbsp; Member Login</a>
 
 
                     </div>
                 </div>
+
+                 <div class="col-lg-2 adminlink pt-10 ">
+                    <div class="left">
+
+
+                           <a class="adminbtn" href="{{route('admin.index')}}"><i class="fa fa-user-circle-o"></i>&nbsp; Admin Login</a>
+
+
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>
